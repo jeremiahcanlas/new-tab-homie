@@ -1,0 +1,79 @@
+@import "tailwindcss";
+
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-background: #f8fafc;
+  --color-background-dark: #1e1e2f;
+  --color-background-dark-secondary: #2c2c3a;
+  --color-text: #111827;
+  --color-text-dark: #d1d5db;
+
+  --animate-fade-in: fade-in 0.3s ease-in;
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+}
+
+@layer utilities {
+  .row-flex {
+    @apply flex flex-row;
+  }
+
+  .col-flex {
+    @apply flex flex-col;
+  }
+
+  .wrap-flex {
+    @apply flex flex-wrap;
+  }
+
+  .animate-once {
+    animation-iteration-count: 1 !important;
+    animation-fill-mode: forwards !important; /* keeps final state */
+  }
+}
+
+@layer components {
+  .main-container {
+    @apply p-2 h-screen w-full flex flex-col gap-3;
+  }
+
+  .placeholder {
+    @apply bg-gray-300 animate-pulse rounded;
+  }
+}
+
+@layer base {
+  body {
+    @apply text-text dark:text-text-dark bg-background dark:bg-background-dark;
+  }
+
+  h1 {
+    @apply font-bold text-[min(5vw,20px)];
+  }
+
+  h2 {
+    @apply font-medium text-[min(5vw,16px)];
+  }
+
+  p {
+    @apply font-medium text-[min(5vw,14px)];
+  }
+}

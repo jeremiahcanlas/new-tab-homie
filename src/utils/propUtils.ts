@@ -1,0 +1,151 @@
+import greetingsData from "../components/Greet/greetings.json";
+
+export interface Coords {
+  lat: number;
+  lon: number;
+}
+
+export const getCoords = async (): Promise<Coords | null> => {
+  if (!navigator.geolocation) {
+    console.error("Geolocation not supported");
+    return null;
+  }
+
+  return new Promise((resolve) => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const newCoords: Coords = {
+          lat: parseFloat(position.coords.latitude.toFixed(5)),
+          lon: parseFloat(position.coords.longitude.toFixed(5)),
+        };
+
+        const cachedCoordsRaw = localStorage.getItem("user_coords");
+        const cachedCoords: Coords | null = cachedCoordsRaw
+          ? JSON.parse(cachedCoordsRaw)
+          : null;
+
+        const coordsChanged =
+          !cachedCoords ||
+          cachedCoords.lat !== newCoords.lat ||
+          cachedCoords.lon !== newCoords.lon;
+
+        if (coordsChanged) {
+          console.log("Coords changed, updating...");
+          localStorage.setItem("user_coords", JSON.stringify(newCoords));
+        }
+
+        resolve(newCoords);
+      },
+      (err) => {
+        console.log("Error getting coords:", err);
+        resolve(null);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 5000,
+      }
+    );
+  });
+};
+
+export const getLocation = async (geolocation: string) => {
+  // const geolocation = localStorage.getItem("user_coords");
+
+  const { lat, lon } = JSON.parse(geolocation);
+
+  try {
+    const res = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&zoom=10&format=json`,
+
+      {
+        headers: {
+          "User-Agent": "homie-app/0.1.1 (contact: jjmcanlas@gmail.com)",
+        },
+      }
+    );
+    if (!res.ok) return null;
+    let data = await res.json();
+
+    data = {
+      city: data.name,
+      stateProvince: data.address.state,
+    };
+
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getWeather = async (geolocation: string) => {
+  const unit = localStorage.getItem("temperatureUnit");
+  const { lat, lon } = JSON.parse(geolocation);
+
+  try {
+    const res = await fetch(
+      `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&temperature_unit=${
+        unit !== "c" ? "fahrenheit" : "celsius"
+      }&current_weather=true`
+    );
+
+    if (!res.ok) {
+      throw new Error(`API Error: ${res.status}`);
+    }
+
+    const data = await res.json();
+
+    const { current_weather, current_weather_units } = data;
+
+    const filteredData = {
+      temperature: Math.round(current_weather.temperature),
+      unit: current_weather_units.temperature,
+    };
+
+    return filteredData;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const getGreeting = async () => {
+  const hour = new Date().getHours();
+  const username = localStorage.getItem("username");
+
+  const currentPeriod = greetingsData.find(
+    (g) => hour >= g.range.start && hour < g.range.end
+  );
+
+  let greetingMessage = "Welcome, Homie";
+
+  if (currentPeriod && username) {
+    const randomMsg =
+      currentPeriod.messages[
+        Math.floor(Math.random() * currentPeriod.messages.length)
+      ];
+    greetingMessage = randomMsg.replace("{{name}}", username);
+  }
+
+  return greetingMessage;
+};
+
+export const getInitialProps = async () => {
+  // Initialize coordinates for weather and location
+  await getCoords();
+
+  const geolocation = localStorage.getItem("user_coords");
+  let location = null;
+  let weather = null;
+
+  if (geolocation) {
+    location = await getLocation(geolocation);
+    weather = await getWeather(geolocation);
+  }
+
+  const data = {
+    location,
+    greetingMessage: await getGreeting(),
+    weather,
+  };
+
+  return data;
+};
