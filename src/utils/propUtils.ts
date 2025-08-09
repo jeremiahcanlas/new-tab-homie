@@ -1,4 +1,4 @@
-import greetingsData from "../components/Greet/greetings.json";
+import greetings from "../data/greetings.json";
 
 export interface Coords {
   lat: number;
@@ -109,7 +109,7 @@ export const getGreeting = async () => {
   const hour = new Date().getHours();
   const username = localStorage.getItem("username");
 
-  const currentPeriod = greetingsData.find(
+  const currentPeriod = greetings.find(
     (g) => hour >= g.range.start && hour < g.range.end
   );
 

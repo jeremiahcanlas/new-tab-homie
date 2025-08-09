@@ -18,8 +18,11 @@ function App({ greetingMessage, location, weather, quote }: AppProps) {
     <div className="main-container">
       <Greet message={greetingMessage} />
       <Clock />
-      <Weather weather={weather} />
-      <Location location={location} />
+      <div>
+        <Weather weather={weather} />
+        <Location location={location} />
+      </div>
+
       <Quote quote={quote} />
     </div>
   );
