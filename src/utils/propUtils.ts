@@ -49,8 +49,6 @@ export const getCoords = async (): Promise<Coords | null> => {
 };
 
 export const getLocation = async (geolocation: string) => {
-  // const geolocation = localStorage.getItem("user_coords");
-
   const { lat, lon } = JSON.parse(geolocation);
 
   try {
@@ -128,6 +126,29 @@ export const getGreeting = async () => {
   return greetingMessage;
 };
 
+export const getQuotes = async () => {
+  try {
+    const res = await fetch(`https://api.quotable.io/random`);
+
+    if (!res.ok) {
+      throw new Error(`API Error: ${res.status}`);
+    }
+
+    const data = await res.json();
+
+    const { content, author } = data;
+
+    const filteredData = {
+      author: author,
+      text: content,
+    };
+
+    return filteredData;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const getInitialProps = async () => {
   // Initialize coordinates for weather and location
   await getCoords();
@@ -135,16 +156,20 @@ export const getInitialProps = async () => {
   const geolocation = localStorage.getItem("user_coords");
   let location = null;
   let weather = null;
+  let quote = null;
 
   if (geolocation) {
     location = await getLocation(geolocation);
     weather = await getWeather(geolocation);
   }
 
+  quote = await getQuotes();
+
   const data = {
     location,
     greetingMessage: await getGreeting(),
     weather,
+    quote,
   };
 
   return data;
