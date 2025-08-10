@@ -70,7 +70,7 @@
   }
 
   h2 {
-    @apply font-medium text-[min(5vw,16px)];
+    @apply font-medium text-[min(5vw,15px)];
   }
 
   p {
