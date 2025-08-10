@@ -1,4 +1,5 @@
 import greetings from "../data/greetings.json";
+import weatherType from "../data/weatherType.json";
 
 export interface Coords {
   lat: number;
@@ -94,9 +95,14 @@ export const getWeather = async (geolocation: string) => {
 
     const { current_weather, current_weather_units } = data;
 
+    const weatherCode = JSON.stringify(current_weather.weathercode);
+
+    const weatherStatus = weatherType[weatherCode as keyof typeof weatherType];
+
     const filteredData = {
       temperature: Math.round(current_weather.temperature),
       unit: current_weather_units.temperature,
+      weatherStatus,
     };
 
     return filteredData;
