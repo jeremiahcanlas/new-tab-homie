@@ -84,7 +84,7 @@ export const getWeather = async (geolocation: string) => {
     const res = await fetch(
       `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&temperature_unit=${
         unit !== "c" ? "fahrenheit" : "celsius"
-      }&current_weather=true`
+      }&current_weather=true&hourly=apparent_temperature`
     );
 
     if (!res.ok) {
@@ -93,16 +93,23 @@ export const getWeather = async (geolocation: string) => {
 
     const data = await res.json();
 
-    const { current_weather, current_weather_units } = data;
+    const { current_weather, current_weather_units, hourly } = data;
 
     const weatherCode = JSON.stringify(current_weather.weathercode);
 
     const weatherStatus = weatherType[weatherCode as keyof typeof weatherType];
 
+    const feelsLike = Math.round(
+      hourly.apparent_temperature[
+        hourly.time.indexOf(current_weather.time.slice(0, 13) + ":00")
+      ]
+    );
+
     const filteredData = {
       temperature: Math.round(current_weather.temperature),
       unit: current_weather_units.temperature,
       weatherStatus,
+      feelsLike,
     };
 
     return filteredData;

@@ -18,7 +18,7 @@ function App({ greetingMessage, location, weather, quote }: AppProps) {
     <div className="main-container">
       <Greet message={greetingMessage} />
       <Clock />
-      <div>
+      <div className="flex flex-col gap-2 border border-gray-300 rounded p-1.5 w-[min(80vw,220px)] shadow-md">
         <Weather weather={weather} />
         <Location location={location} />
       </div>
