@@ -1,4 +1,5 @@
-import greetingsData from "../components/Greet/greetings.json";
+import greetings from "../data/greetings.json";
+import weatherType from "../data/weatherType.json";
 
 export interface Coords {
   lat: number;
@@ -49,8 +50,6 @@ export const getCoords = async (): Promise<Coords | null> => {
 };
 
 export const getLocation = async (geolocation: string) => {
-  // const geolocation = localStorage.getItem("user_coords");
-
   const { lat, lon } = JSON.parse(geolocation);
 
   try {
@@ -85,7 +84,7 @@ export const getWeather = async (geolocation: string) => {
     const res = await fetch(
       `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&temperature_unit=${
         unit !== "c" ? "fahrenheit" : "celsius"
-      }&current_weather=true`
+      }&current_weather=true&hourly=apparent_temperature`
     );
 
     if (!res.ok) {
@@ -94,11 +93,23 @@ export const getWeather = async (geolocation: string) => {
 
     const data = await res.json();
 
-    const { current_weather, current_weather_units } = data;
+    const { current_weather, current_weather_units, hourly } = data;
+
+    const weatherCode = JSON.stringify(current_weather.weathercode);
+
+    const weatherStatus = weatherType[weatherCode as keyof typeof weatherType];
+
+    const feelsLike = Math.round(
+      hourly.apparent_temperature[
+        hourly.time.indexOf(current_weather.time.slice(0, 13) + ":00")
+      ]
+    );
 
     const filteredData = {
       temperature: Math.round(current_weather.temperature),
       unit: current_weather_units.temperature,
+      weatherStatus,
+      feelsLike,
     };
 
     return filteredData;
@@ -111,7 +122,7 @@ export const getGreeting = async () => {
   const hour = new Date().getHours();
   const username = localStorage.getItem("username");
 
-  const currentPeriod = greetingsData.find(
+  const currentPeriod = greetings.find(
     (g) => hour >= g.range.start && hour < g.range.end
   );
 
@@ -128,6 +139,29 @@ export const getGreeting = async () => {
   return greetingMessage;
 };
 
+export const getQuotes = async () => {
+  try {
+    const res = await fetch(`https://api.quotable.io/random`);
+
+    if (!res.ok) {
+      throw new Error(`API Error: ${res.status}`);
+    }
+
+    const data = await res.json();
+
+    const { content, author } = data;
+
+    const filteredData = {
+      author: author,
+      text: content,
+    };
+
+    return filteredData;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const getInitialProps = async () => {
   // Initialize coordinates for weather and location
   await getCoords();
@@ -135,16 +169,20 @@ export const getInitialProps = async () => {
   const geolocation = localStorage.getItem("user_coords");
   let location = null;
   let weather = null;
+  let quote = null;
 
   if (geolocation) {
     location = await getLocation(geolocation);
     weather = await getWeather(geolocation);
   }
 
+  quote = await getQuotes();
+
   const data = {
     location,
     greetingMessage: await getGreeting(),
     weather,
+    quote,
   };
 
   return data;

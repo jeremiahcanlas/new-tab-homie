@@ -7,4 +7,6 @@ export type LocationData = {
 export type WeatherData = {
   temperature: number;
   unit: string;
+  weatherStatus: string;
+  feelsLike: number;
 };

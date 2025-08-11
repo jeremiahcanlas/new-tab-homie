@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "Homie Dashboard",
+  "version": "0.1.0",
+  "description": "Homie - a custom new tab dashboard showing location, weather, and quotes.",
+  "chrome_url_overrides": {
+    "newtab": "index.html"
+  },
+  "permissions": ["storage", "offscreen", "geolocation"],
+  "host_permissions": [
+    "*://nominatim.openstreetmap.org/*",
+    "*://api.quotable.io/*",
+    "*://api.open-meteo.com/*"
+  ]
+}
