@@ -120,7 +120,7 @@ export const getWeather = async (geolocation: string) => {
 
 export const getGreeting = async () => {
   const hour = new Date().getHours();
-  const username = localStorage.getItem("username");
+  // const username = localStorage.getItem("username");
 
   const currentPeriod = greetings.find(
     (g) => hour >= g.range.start && hour < g.range.end
@@ -128,12 +128,12 @@ export const getGreeting = async () => {
 
   let greetingMessage = "Welcome, Homie";
 
-  if (currentPeriod && username) {
+  if (currentPeriod) {
     const randomMsg =
       currentPeriod.messages[
         Math.floor(Math.random() * currentPeriod.messages.length)
       ];
-    greetingMessage = randomMsg.replace("{{name}}", username);
+    greetingMessage = randomMsg;
   }
 
   return greetingMessage;
