@@ -1,5 +1,6 @@
-import greetings from "../data/greetings.json";
 import weatherType from "../data/weatherType.json";
+import greetService from "../services/greet/localGreetingService";
+import quotesService from "../services/quote/apiQuoteService";
 
 export interface Coords {
   lat: number;
@@ -115,70 +116,26 @@ export const getWeather = async (geolocation: string, unit: string) => {
   }
 };
 
-export const getGreeting = async () => {
-  const hour = new Date().getHours();
-  // const username = localStorage.getItem("username");
-
-  const currentPeriod = greetings.find(
-    (g) => hour >= g.range.start && hour < g.range.end
-  );
-
-  let greetingMessage = "Welcome, Homie";
-
-  if (currentPeriod) {
-    const randomMsg =
-      currentPeriod.messages[
-        Math.floor(Math.random() * currentPeriod.messages.length)
-      ];
-    greetingMessage = randomMsg;
-  }
-
-  return greetingMessage;
-};
-
-export const getQuotes = async () => {
-  try {
-    const res = await fetch(`https://api.quotable.io/random`);
-
-    if (!res.ok) {
-      throw new Error(`API Error: ${res.status}`);
-    }
-
-    const data = await res.json();
-
-    const { content, author } = data;
-
-    const filteredData = {
-      author: author,
-      text: content,
-    };
-
-    return filteredData;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 export const getInitialProps = async () => {
   // Initialize coordinates for weather and location
   await getCoords();
 
   const geolocation = localStorage.getItem("user_coords");
   const unit = localStorage.getItem("temp_unit") || "celcius";
+
+  const greetingMessage = await greetService.getGreeting();
   let location = null;
   let weather = null;
-  let quote = null;
+  const quote = await quotesService.getQuote();
 
   if (geolocation && unit) {
     location = await getLocation(geolocation);
     weather = await getWeather(geolocation, unit);
   }
 
-  quote = await getQuotes();
-
   const data = {
     location,
-    greetingMessage: await getGreeting(),
+    greetingMessage,
     weather,
     quote,
   };
