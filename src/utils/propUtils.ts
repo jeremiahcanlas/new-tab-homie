@@ -164,7 +164,7 @@ export const getInitialProps = async () => {
   await getCoords();
 
   const geolocation = localStorage.getItem("user_coords");
-  const unit = localStorage.getItem("temp_unit");
+  const unit = localStorage.getItem("temp_unit") || "celcius";
   let location = null;
   let weather = null;
   let quote = null;
