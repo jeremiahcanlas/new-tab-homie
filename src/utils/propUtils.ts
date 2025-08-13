@@ -76,15 +76,12 @@ export const getLocation = async (geolocation: string) => {
   }
 };
 
-export const getWeather = async (geolocation: string) => {
-  const unit = localStorage.getItem("temperatureUnit");
+export const getWeather = async (geolocation: string, unit: string) => {
   const { lat, lon } = JSON.parse(geolocation);
 
   try {
     const res = await fetch(
-      `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&temperature_unit=${
-        unit !== "c" ? "fahrenheit" : "celsius"
-      }&current_weather=true&hourly=apparent_temperature`
+      `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&temperature_unit=${unit}&current_weather=true&hourly=apparent_temperature`
     );
 
     if (!res.ok) {
@@ -167,13 +164,14 @@ export const getInitialProps = async () => {
   await getCoords();
 
   const geolocation = localStorage.getItem("user_coords");
+  const unit = localStorage.getItem("temp_unit");
   let location = null;
   let weather = null;
   let quote = null;
 
-  if (geolocation) {
+  if (geolocation && unit) {
     location = await getLocation(geolocation);
-    weather = await getWeather(geolocation);
+    weather = await getWeather(geolocation, unit);
   }
 
   quote = await getQuotes();
