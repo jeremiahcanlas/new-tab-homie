@@ -1,50 +1,46 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDashboardSettings } from "../../context/DashboardSettingsContext";
 import type { WeatherData } from "../../types";
-import { getWeather } from "../../utils/propUtils";
+import weatherService from "../../services/weather/weatherService";
+import coordinatesService from "../../services/coordinates/coordinatesService";
 
-type WeatherProp = { weather: WeatherData | null | undefined };
-
-const Weather = ({ weather }: WeatherProp) => {
+const Weather = (): React.JSX.Element => {
   const { unit } = useDashboardSettings();
 
-  const [updatedWeather, setUpdatedWeather] = useState(weather);
+  // turn this into a custom hook TODO
+  const [weather, setWeather] = useState<WeatherData | null>(null);
 
-  useEffect(() => {
-    const fetchWeather = async () => {
-      const coords = localStorage.getItem("user_coords");
+  const fetchWeather = useCallback(async () => {
+    const coords = await coordinatesService.getCoords();
 
-      if (coords) {
-        const w = await getWeather(coords, unit);
+    if (!coords) return;
 
-        if (w) setUpdatedWeather(w);
-      }
-    };
+    const weatherData = await weatherService.getWeather(coords, unit);
 
-    if (unit !== localStorage.getItem("temp_unit")) {
-      fetchWeather();
-    }
+    setWeather(weatherData);
   }, [unit]);
 
-  if (!updatedWeather) return;
+  useEffect(() => {
+    fetchWeather();
+  }, [fetchWeather]);
+
+  if (!weather) return <div></div>;
 
   return (
     <div className="flex flex-row place-content-between">
       <div>
         <h1 className="leading-none">
-          {updatedWeather.temperature}
-          <span className="text-xs align-top">{updatedWeather.unit}</span>
+          {weather.temperature}
+          <span className="text-xs align-top">{weather.unit}</span>
         </h1>
-        <h2>{updatedWeather.weatherStatus}</h2>
+        <h2>{weather.weatherStatus}</h2>
       </div>
 
       <div>
         <p className="inline-block mr-1 align-top leading-none">feels</p>
         <h2 className="inline-block text-md font-semibold leading-none align-top">
-          {updatedWeather.feelsLike}
-          <span className="text-xs align-top">
-            {updatedWeather.unit.slice(0, 1)}
-          </span>
+          {weather.feelsLike}
+          <span className="text-xs align-top">{weather.unit.slice(0, 1)}</span>
         </h2>
       </div>
     </div>
