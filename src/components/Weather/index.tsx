@@ -1,30 +1,14 @@
-import { useCallback, useEffect, useState } from "react";
 import { useDashboardSettings } from "../../context/DashboardSettingsContext";
-import type { WeatherData } from "../../types";
-import weatherService from "../../services/weather/weatherService";
-import coordinatesService from "../../services/coordinates/coordinatesService";
+import { useWeather } from "../../hooks";
 
 const Weather = (): React.JSX.Element => {
   const { unit } = useDashboardSettings();
 
-  // turn this into a custom hook TODO
-  const [weather, setWeather] = useState<WeatherData | null>(null);
+  const { weather, loading, error } = useWeather(unit);
 
-  const fetchWeather = useCallback(async () => {
-    const coords = await coordinatesService.getCoords();
+  if (error) return <div>Error retrieving weather data.</div>;
 
-    if (!coords) return;
-
-    const weatherData = await weatherService.getWeather(coords, unit);
-
-    setWeather(weatherData);
-  }, [unit]);
-
-  useEffect(() => {
-    fetchWeather();
-  }, [fetchWeather]);
-
-  if (!weather) return <div></div>;
+  if (loading || !weather) return <div>loading...</div>;
 
   return (
     <div className="flex flex-row place-content-between">
