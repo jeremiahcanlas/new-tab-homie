@@ -14,31 +14,29 @@ const weatherService: WeatherProvider = {
 
     try {
       const res = await fetch(
-        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&temperature_unit=${unit}&current_weather=true&hourly=apparent_temperature`
+        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&temperature_unit=${unit}&current=temperature_2m,apparent_temperature,weather_code`
       );
 
       if (!res.ok) {
-        throw new Error(`API Error: ${res.status}`);
+        throw new Error(`Weather API Error: ${res.status}`);
       }
 
       const data = await res.json();
 
-      const { current_weather, current_weather_units, hourly } = data;
+      const { weather_code, apparent_temperature, temperature_2m } =
+        data.current;
 
-      const weatherCode = JSON.stringify(current_weather.weathercode);
+      const weatherCode = JSON.stringify(weather_code);
 
       const weatherStatus =
         weatherType[weatherCode as keyof typeof weatherType];
 
-      const feelsLike = Math.round(
-        hourly.apparent_temperature[
-          hourly.time.indexOf(current_weather.time.slice(0, 13) + ":00")
-        ]
-      );
+      const temperature = Math.round(temperature_2m);
+
+      const feelsLike = Math.round(apparent_temperature);
 
       const filteredData = {
-        temperature: Math.round(current_weather.temperature),
-        unit: current_weather_units.temperature,
+        temperature,
         weatherStatus,
         feelsLike,
       };
