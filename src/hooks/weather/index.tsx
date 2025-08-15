@@ -25,7 +25,7 @@ export const useWeather = () => {
         throw new Error("Could not get coordinates");
       }
 
-      const weatherData = await weatherService.getWeather(coords, unit);
+      const weatherData = await weatherService.getCurrentWeather(coords, unit);
       setWeather(weatherData);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unknown error");

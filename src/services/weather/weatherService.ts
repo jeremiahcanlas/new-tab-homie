@@ -2,7 +2,7 @@ import type WeatherProvider from "./WeatherProvider";
 import weatherType from "../../data/weatherType.json";
 
 const weatherService: WeatherProvider = {
-  async getWeather(geolocation, unit) {
+  async getCurrentWeather(geolocation, unit) {
     if (!geolocation) {
       geolocation = {
         lat: 43.65107,
