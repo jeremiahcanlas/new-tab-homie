@@ -1,38 +1,7 @@
-import { useEffect, useState } from "react";
+import { useClock } from "../../hooks/clock";
 
-const Clock = () => {
-  const [dateTime, setDateTime] = useState(() => {
-    const now = new Date();
-    return {
-      currentDate: now
-        .toLocaleString("en-US", { dateStyle: "full" })
-        .toUpperCase(),
-      currentTime: now.toLocaleString("en-US", {
-        hour: "2-digit",
-        hour12: localStorage.getItem("clockFormat") === "12" ? true : false,
-        minute: "2-digit",
-      }),
-    };
-  });
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const now = new Date();
-
-      setDateTime({
-        currentDate: now
-          .toLocaleString("en-US", { dateStyle: "full" })
-          .toUpperCase(),
-        currentTime: now.toLocaleString("en-US", {
-          hour: "2-digit",
-          hour12: localStorage.getItem("clockFormat") === "12" ? true : false,
-          minute: "2-digit",
-        }),
-      });
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
+const Clock = (): React.JSX.Element => {
+  const { dateTime } = useClock();
 
   return (
     <div>
