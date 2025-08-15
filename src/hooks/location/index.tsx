@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import LocationService from "../../services/location/locationService";
-import CoordinatesService from "../../services/coordinates/coordinatesService";
+import locationService from "../../services/location/locationService";
+import coordinatesService from "../../services/coordinates/coordinatesService";
 import type { LocationData } from "../../types";
 
 export const useLocation = () => {
@@ -17,12 +17,12 @@ export const useLocation = () => {
       setLoading(true);
       setError(null);
 
-      const coords = await CoordinatesService.getCoords();
+      const coords = await coordinatesService.getCoords();
       if (!coords) {
         throw new Error("Could not get coordinates");
       }
 
-      const weatherData = await LocationService.getLocation(coords);
+      const weatherData = await locationService.getLocation(coords);
       setLocation(weatherData);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unknown error");

@@ -1,9 +1,9 @@
-import GreetService from "../services/greet/greetingService";
-import QuoteService from "../services/quote/quoteService";
+import greetService from "../services/greet/greetingService";
+import quoteService from "../services/quote/quoteService";
 
 export const getInitialProps = async () => {
-  const greetingMessage = await GreetService.getGreeting();
-  const quote = await QuoteService.getQuote();
+  const greetingMessage = await greetService.getGreeting();
+  const quote = await quoteService.getQuote();
 
   const data = {
     greetingMessage,

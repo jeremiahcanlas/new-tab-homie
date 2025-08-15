@@ -15,7 +15,7 @@ const locationService: LocationProvider = {
 
     try {
       const res = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&zoom=10&format=json`,
+        `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&zoom=10&format=jsonv2`,
 
         {
           headers: {
@@ -24,11 +24,14 @@ const locationService: LocationProvider = {
         }
       );
       if (!res.ok) return null;
+
       let data = await res.json();
 
+      const { name, address } = data;
+
       data = {
-        city: data.name,
-        stateProvince: data.address.state,
+        city: name,
+        stateProvince: address.state,
         locationDisabled: isLocationDisabled,
       };
 

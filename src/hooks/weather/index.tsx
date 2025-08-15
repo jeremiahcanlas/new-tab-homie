@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import WeatherService from "../../services/weather/weatherService";
-import CoordinatesService from "../../services/coordinates/coordinatesService";
+import weatherService from "../../services/weather/weatherService";
+import coordinatesService from "../../services/coordinates/coordinatesService";
 import type { WeatherData } from "../../types";
 import { useDashboardSettings } from "../../context/DashboardSettingsContext";
 
@@ -20,12 +20,12 @@ export const useWeather = () => {
       setLoading(true);
       setError(null);
 
-      const coords = await CoordinatesService.getCoords();
+      const coords = await coordinatesService.getCoords();
       if (!coords) {
         throw new Error("Could not get coordinates");
       }
 
-      const weatherData = await WeatherService.getWeather(coords, unit);
+      const weatherData = await weatherService.getWeather(coords, unit);
       setWeather(weatherData);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unknown error");
