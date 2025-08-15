@@ -1,30 +1,67 @@
 import Clock from "./components/Clock";
 import Greet from "./components/Greet";
-
 import Location from "./components/Location";
 import Quote from "./components/Quote";
 import Weather from "./components/Weather";
-import type { LocationData, WeatherData } from "./types";
+import Menu from "./components/Menu";
+
+import { useState } from "react";
+
+import { GearIcon } from "./assets/vectors";
+
+import { DashboardSettingsProvider } from "./context/DashboardSettingsContext";
 
 type AppProps = {
   greetingMessage: string;
-  location: LocationData;
-  weather?: WeatherData | null;
   quote?: { author: string; text: string } | null;
 };
 
-function App({ greetingMessage, location, weather, quote }: AppProps) {
-  return (
-    <div className="main-container">
-      <Greet message={greetingMessage} />
-      <Clock />
-      <div className="flex flex-col gap-2 border border-gray-300 rounded p-1.5 w-[min(80vw,220px)] shadow-md">
-        <Weather weather={weather} />
-        <Location location={location} />
-      </div>
+const GearButton = ({
+  isOpen,
+  setIsOpen,
+}: {
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}): React.JSX.Element => (
+  <div
+    className="w-12 absolute right-12 bottom-10 hover:animate-spin"
+    onClick={() => setIsOpen(!isOpen)}
+  >
+    <GearIcon />
+  </div>
+);
 
-      <Quote quote={quote} />
+const Forecast = (): React.JSX.Element => {
+  return (
+    <div className="flex flex-col gap-2 border border-gray-300 rounded p-1.5 w-[min(80vw,220px)] shadow-md">
+      <Weather />
+      <Location />
     </div>
+  );
+};
+
+const Dashboard = ({ greetingMessage, quote }: AppProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="h-screen flex flex-row overflow-hidden animate-fade-in">
+      <div className="main-container">
+        <Greet message={greetingMessage} />
+        <Clock />
+        <Forecast />
+        <Quote quote={quote} />
+      </div>
+      <Menu isOpen={isOpen} />
+      <GearButton isOpen={isOpen} setIsOpen={setIsOpen} />
+    </div>
+  );
+};
+
+function App(props: AppProps) {
+  return (
+    <DashboardSettingsProvider>
+      <Dashboard {...props} />
+    </DashboardSettingsProvider>
   );
 }
 
