@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import WeatherService from "../services/weather/weatherService";
-import CoordinatesService from "../services/coordinates/coordinatesService";
-import type { WeatherData } from "../types";
-import { useDashboardSettings } from "../context/DashboardSettingsContext";
+import WeatherService from "../../services/weather/weatherService";
+import CoordinatesService from "../../services/coordinates/coordinatesService";
+import type { WeatherData } from "../../types";
+import { useDashboardSettings } from "../../context/DashboardSettingsContext";
 
 export const useWeather = () => {
   const [weather, setWeather] = useState<WeatherData | null>(null);
@@ -10,8 +10,6 @@ export const useWeather = () => {
   const [error, setError] = useState<string | null>(null);
 
   const { unit } = useDashboardSettings();
-
-  console.log(unit);
 
   const hasFetched = useRef(false);
 

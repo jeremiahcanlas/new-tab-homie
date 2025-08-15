@@ -1,4 +1,4 @@
-import { useWeather } from "../../hooks";
+import { useWeather } from "../../hooks/weather";
 
 const Weather = (): React.JSX.Element => {
   const { weather, loading, error } = useWeather();

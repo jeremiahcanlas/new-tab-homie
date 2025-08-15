@@ -1,28 +1,12 @@
-import { useCallback, useEffect, useState } from "react";
 import { LocationPin } from "../../assets/vectors";
-import type { LocationData } from "../../types";
-import LocationService from "../../services/location/locationService";
-import CoordinatesService from "../../services/coordinates/coordinatesService";
+import { useLocation } from "../../hooks/location";
 
 const Location = (): React.JSX.Element => {
-  const [location, setLocation] = useState<LocationData | null>(null);
+  const { location, loading, error } = useLocation();
 
-  // turn this into a custom hook TODO
-  const fetchLocation = useCallback(async () => {
-    const coords = await CoordinatesService.getCoords();
+  if (error) return <div>Error retrieving location</div>;
 
-    if (!coords) return;
-
-    const weatherData = await LocationService.getLocation(coords);
-
-    setLocation(weatherData);
-  }, []);
-
-  useEffect(() => {
-    fetchLocation();
-  }, [fetchLocation]);
-
-  if (!location) return <div></div>;
+  if (loading || !location) return <div>Loading...</div>;
 
   return (
     <h2 className="align-middle">
