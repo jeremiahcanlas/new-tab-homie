@@ -1,10 +1,7 @@
-import { useDashboardSettings } from "../../context/DashboardSettingsContext";
 import { useWeather } from "../../hooks";
 
 const Weather = (): React.JSX.Element => {
-  const { unit } = useDashboardSettings();
-
-  const { weather, loading, error } = useWeather(unit);
+  const { weather, loading, error } = useWeather();
 
   if (error) return <div>Error retrieving weather data.</div>;
 
