@@ -25,7 +25,7 @@ const Menu = ({ isOpen }: Prop) => {
     <div
       className={
         (isOpen ? "animate-slide-in-left" : "animate-slide-out-left") +
-        " bg-text-dark w-[25%] p-1"
+        " bg-text-dark w-[25%] p-1 flex flex-col gap-2"
       }
       onAnimationEnd={handleAnimationEnd}
     >
@@ -33,10 +33,11 @@ const Menu = ({ isOpen }: Prop) => {
 
       <div>
         <label className="block mb-1" htmlFor="username">
-          Username:
+          <p> Username:</p>
         </label>
         <input
           id="username"
+          className="bg-white p-1"
           type="text"
           value={username}
           placeholder="Enter username"
@@ -45,7 +46,7 @@ const Menu = ({ isOpen }: Prop) => {
       </div>
 
       <div>
-        <span className="block mb-1">Clock Format:</span>
+        <p className="block mb-1">Clock Format:</p>
         <label className="mr-4">
           <input
             type="radio"
@@ -54,7 +55,7 @@ const Menu = ({ isOpen }: Prop) => {
             onChange={() => setClockFormat("12")}
             className="mr-1"
           />
-          12-Hour
+          <p className="inline-block">12-hr</p>
         </label>
         <label className="mr-4">
           <input
@@ -64,12 +65,12 @@ const Menu = ({ isOpen }: Prop) => {
             onChange={() => setClockFormat("24")}
             className="mr-1"
           />
-          24-Hour
+          <p className="inline-block">24-hr</p>
         </label>
       </div>
 
       <div>
-        <span className="block mb-1">Temperature Unit:</span>
+        <p className="block mb-1">Temperature Unit:</p>
         <label className="mr-4">
           <input
             type="radio"
@@ -78,7 +79,7 @@ const Menu = ({ isOpen }: Prop) => {
             onChange={() => setUnit("celsius")}
             className="mr-1"
           />
-          Celsius (°C)
+          <p className="inline-block">°C</p>
         </label>
         <label className="mr-4">
           <input
@@ -88,7 +89,7 @@ const Menu = ({ isOpen }: Prop) => {
             onChange={() => setUnit("fahrenheit")}
             className="mr-1"
           />
-          Fahrenheit (°F)
+          <p className="inline-block">°F</p>
         </label>
       </div>
     </div>
