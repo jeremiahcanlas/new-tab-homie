@@ -23,6 +23,7 @@
   --animate-fade-in: fade-in 0.3s ease-in;
   --animate-slide-in-left: slideInLeft 0.5s ease forwards;
   --animate-slide-out-left: slideOutLeft 0.5s ease forwards;
+  --animate-slide-in-right: slideInRight 0.5s ease forwards;
 
   @keyframes fade-in {
     0% {
@@ -48,6 +49,15 @@
     }
     to {
       transform: translateX(100%);
+    }
+  }
+
+  @keyframes slideInRight {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(0);
     }
   }
 }

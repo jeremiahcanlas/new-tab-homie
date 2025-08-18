@@ -1,19 +1,18 @@
-import { useWeather } from "../../hooks/weather";
+import type { WeatherData } from "../../types";
 
-const Weather = (): React.JSX.Element => {
-  const { weather, loading, error } = useWeather();
+type WeatherProps = {
+  weather: WeatherData;
+  error?: string | null;
+};
 
-  if (error) return <p>Error retrieving weather data.</p>;
+const Weather = (props: WeatherProps): React.JSX.Element => {
+  const { weather, error } = props;
 
-  if (loading || !weather)
+  if (error)
     return (
-      <div className="flex flex-row place-content-between">
-        <div>
-          <div className="placeholder w-7 h-5 mb-1" />
-          <div className="placeholder w-20 h-4" />
-        </div>
-        <div className="placeholder w-15 h-4" />
-      </div>
+      <p className="border rounded border-gray-300 px-1 py-1.5">
+        Error retrieving weather data.
+      </p>
     );
 
   return (
