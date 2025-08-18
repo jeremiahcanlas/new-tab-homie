@@ -5,7 +5,16 @@ const Weather = (): React.JSX.Element => {
 
   if (error) return <p>Error retrieving weather data.</p>;
 
-  if (loading || !weather) return <p>loading...</p>;
+  if (loading || !weather)
+    return (
+      <div className="flex flex-row place-content-between">
+        <div>
+          <div className="placeholder w-7 h-5 mb-1" />
+          <div className="placeholder w-20 h-4" />
+        </div>
+        <div className="placeholder w-15 h-4" />
+      </div>
+    );
 
   return (
     <div className="flex flex-row place-content-between">

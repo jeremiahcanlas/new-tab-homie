@@ -7,8 +7,6 @@ import { getInitialProps } from "./utils/appUtils.ts";
 async function init() {
   const props = await getInitialProps();
 
-  console.log("INIT PROPS:", props);
-
   createRoot(document.getElementById("root")!).render(
     <StrictMode>
       <App {...props} />

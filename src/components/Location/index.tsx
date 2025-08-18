@@ -6,7 +6,7 @@ const Location = (): React.JSX.Element => {
 
   if (error) return <div>Error retrieving location</div>;
 
-  if (loading || !location) return <div>Loading...</div>;
+  if (loading || !location) return <div className="placeholder w-40 h-5" />;
 
   return (
     <h2 className="align-middle">
