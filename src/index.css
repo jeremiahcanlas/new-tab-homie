@@ -113,4 +113,8 @@
   p {
     @apply font-medium text-[min(5vw,14px)];
   }
+
+  svg path {
+    @apply stroke-text dark:stroke-text-dark;
+  }
 }
