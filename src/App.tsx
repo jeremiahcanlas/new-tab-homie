@@ -60,7 +60,10 @@ const Dashboard = ({ greetingMessage, quote }: AppProps) => {
 
   return (
     <div className="h-screen flex flex-row overflow-hidden animate-fade-in">
-      <div className="main-container">
+      <div
+        className="main-container"
+        onClick={() => isOpen && setIsOpen(false)}
+      >
         <Greet message={greetingMessage} />
         <Clock />
         <Forecast />
