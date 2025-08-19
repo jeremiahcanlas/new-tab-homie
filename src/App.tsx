@@ -46,7 +46,8 @@ const Forecast = (): React.JSX.Element => {
     error: locationError,
   } = useLocation();
 
-  if (locationLoading || weatherLoading || !weather || !location) return <></>;
+  if (locationLoading || weatherLoading || !weather || !location)
+    return <div className="h-[87px]" />;
 
   return (
     <div className="flex flex-col gap-2 border border-gray-300 rounded p-1.5 w-[min(80vw,220px)] shadow-md animate-slide-in-right">
