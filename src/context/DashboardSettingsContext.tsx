@@ -71,9 +71,11 @@ export const DashboardSettingsProvider: React.FC<{
       ) {
         setUnit(e.newValue);
       }
+
       if (e.key === "username" && e.newValue) {
         setUsername(e.newValue);
       }
+
       if (
         e.key === "clockFormat" &&
         (e.newValue === "12" || e.newValue === "24")
@@ -81,7 +83,11 @@ export const DashboardSettingsProvider: React.FC<{
         setClockFormat(e.newValue as "12" | "24");
       }
 
-      if (e.key === "darkToggled" && e.newValue) {
+      if (
+        e.key === "darkToggled" &&
+        e.newValue &&
+        (e.newValue === "true" || e.newValue === "false")
+      ) {
         setDarkToggled(JSON.parse(e.newValue));
       }
     };
