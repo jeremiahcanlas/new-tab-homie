@@ -12,6 +12,7 @@ import { GearIcon } from "./assets/vectors";
 import { DashboardSettingsProvider } from "./context/DashboardSettingsContext";
 import { useWeather } from "./hooks/weather";
 import { useLocation } from "./hooks/location";
+import Search from "./components/Search";
 
 type AppProps = {
   greetingMessage: string;
@@ -67,6 +68,7 @@ const Dashboard = ({ greetingMessage, quote }: AppProps) => {
         <Greet message={greetingMessage} />
         <Clock />
         <Forecast />
+        <Search />
         <Quote quote={quote} />
       </div>
       <Menu isOpen={isOpen} />
