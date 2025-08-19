@@ -76,7 +76,7 @@
   }
 
   .animate-once {
-    animation-iteration-count: 1 !important;
+    animation-iteration-count: 0.25 !important;
     animation-fill-mode: forwards !important; /* keeps final state */
   }
 

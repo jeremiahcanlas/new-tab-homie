@@ -26,7 +26,7 @@ const GearButton = ({
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }): React.JSX.Element => (
   <div
-    className="w-12 absolute right-12 bottom-10 hover:animate-spin"
+    className="w-12 absolute right-12 bottom-10 hover:animate-spin animate-once"
     onClick={() => setIsOpen(!isOpen)}
   >
     <GearIcon />
