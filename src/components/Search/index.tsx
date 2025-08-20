@@ -1,10 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDashboardSettings } from "../../context/DashboardSettingsContext";
 // import useGoogleSuggestions from "../../hooks/search/useGoogleSuggestions";
 
 const Search = (): React.JSX.Element => {
-  const [query, setQuery] = useState("");
-
+  const { isSearchToggled } = useDashboardSettings();
   // const { suggestions } = useGoogleSuggestions(query);
+  const [query, setQuery] = useState("");
+  const [shouldRender, setShouldRender] = useState(isSearchToggled);
+
+  useEffect(() => {
+    if (isSearchToggled) setShouldRender(true);
+  }, [isSearchToggled]);
+
+  const handleAnimationEnd = () => {
+    if (!isSearchToggled) setShouldRender(false);
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,8 +32,19 @@ const Search = (): React.JSX.Element => {
   //   window.location.href = `${baseUrl}?q=${encodeURIComponent(suggestion)}`;
   // };
 
+  if (!shouldRender) return <></>;
+
   return (
-    <form onSubmit={handleSubmit} className="relative max-w-md mt-5">
+    <form
+      onSubmit={handleSubmit}
+      className={
+        "relative max-w-md mt-5" +
+        (isSearchToggled
+          ? " animate-slide-in-right"
+          : " animate-slide-out-right")
+      }
+      onAnimationEnd={handleAnimationEnd}
+    >
       <div className="flex">
         <input
           type="text"
