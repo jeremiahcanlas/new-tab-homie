@@ -1,8 +1,10 @@
 import { useState } from "react";
+import useGoogleSuggestions from "../../hooks/search/useGoogleSuggestions";
 
 const Search = (): React.JSX.Element => {
   const [query, setQuery] = useState("");
-  //   const [suggestions, setSuggestions] = useState<string[]>([]);
+
+  const { suggestions } = useGoogleSuggestions(query);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -11,6 +13,13 @@ const Search = (): React.JSX.Element => {
     const baseUrl = "https://www.google.com/search";
 
     window.location.href = `${baseUrl}?q=${encodeURIComponent(query)}`;
+  };
+
+  const handleSuggestionClick = (suggestion: string) => {
+    setQuery(suggestion);
+    const baseUrl = "https://www.google.com/search";
+
+    window.location.href = `${baseUrl}?q=${encodeURIComponent(suggestion)}`;
   };
 
   return (
@@ -29,6 +38,20 @@ const Search = (): React.JSX.Element => {
           Search
         </button>
       </div>
+
+      {suggestions.length > 0 && (
+        <ul className="absolute z-10 w-full bg-white dark:bg-background-dark-secondary border mt-1 rounded shadow">
+          {suggestions.map((s, idx) => (
+            <li
+              key={idx}
+              onClick={() => handleSuggestionClick(s)}
+              className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+            >
+              {s}
+            </li>
+          ))}
+        </ul>
+      )}
     </form>
   );
 };
