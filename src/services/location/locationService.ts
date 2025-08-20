@@ -19,7 +19,7 @@ const locationService: LocationProvider = {
 
         {
           headers: {
-            "User-Agent": "homie-app/0.3.0 (contact: email@email.com)",
+            "User-Agent": "homie-app/0.4.0 (contact: email@email.com)",
           },
         }
       );

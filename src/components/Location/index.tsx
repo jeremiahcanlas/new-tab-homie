@@ -1,12 +1,20 @@
 import { LocationPin } from "../../assets/vectors";
-import { useLocation } from "../../hooks/location";
+import type { LocationData } from "../../types";
 
-const Location = (): React.JSX.Element => {
-  const { location, loading, error } = useLocation();
+type LocationProps = {
+  location: LocationData;
+  error?: string | null;
+};
 
-  if (error) return <div>Error retrieving location</div>;
+const Location = (props: LocationProps): React.JSX.Element => {
+  const { location, error } = props;
 
-  if (loading || !location) return <div>Loading...</div>;
+  if (error)
+    return (
+      <p className="border rounded border-gray-300 px-1 py-1.5">
+        Error retrieving location.
+      </p>
+    );
 
   return (
     <h2 className="align-middle">

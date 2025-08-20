@@ -10,6 +10,9 @@ import { useState } from "react";
 import { GearIcon } from "./assets/vectors";
 
 import { DashboardSettingsProvider } from "./context/DashboardSettingsContext";
+import { useWeather } from "./hooks/weather";
+import { useLocation } from "./hooks/location";
+import Search from "./components/Search";
 
 type AppProps = {
   greetingMessage: string;
@@ -24,7 +27,7 @@ const GearButton = ({
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }): React.JSX.Element => (
   <div
-    className="w-12 absolute right-12 bottom-10 hover:animate-spin"
+    className="w-12 absolute right-12 bottom-10 hover:animate-spin animate-once"
     onClick={() => setIsOpen(!isOpen)}
   >
     <GearIcon />
@@ -32,10 +35,24 @@ const GearButton = ({
 );
 
 const Forecast = (): React.JSX.Element => {
+  const {
+    loading: weatherLoading,
+    weather,
+    error: weatherError,
+  } = useWeather();
+  const {
+    loading: locationLoading,
+    location,
+    error: locationError,
+  } = useLocation();
+
+  if (locationLoading || weatherLoading || !weather || !location)
+    return <div className="h-[87px]" />;
+
   return (
-    <div className="flex flex-col gap-2 border border-gray-300 rounded p-1.5 w-[min(80vw,220px)] shadow-md">
-      <Weather />
-      <Location />
+    <div className="flex flex-col gap-2 border border-gray-300 rounded p-1.5 w-[min(80vw,220px)] shadow-md animate-slide-in-right">
+      <Weather weather={weather} error={weatherError} />
+      <Location location={location} error={locationError} />
     </div>
   );
 };
@@ -45,10 +62,14 @@ const Dashboard = ({ greetingMessage, quote }: AppProps) => {
 
   return (
     <div className="h-screen flex flex-row overflow-hidden animate-fade-in">
-      <div className="main-container">
+      <div
+        className="main-container"
+        onClick={() => isOpen && setIsOpen(false)}
+      >
         <Greet message={greetingMessage} />
         <Clock />
         <Forecast />
+        <Search />
         <Quote quote={quote} />
       </div>
       <Menu isOpen={isOpen} />

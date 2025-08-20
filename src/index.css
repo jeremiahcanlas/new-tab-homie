@@ -23,6 +23,7 @@
   --animate-fade-in: fade-in 0.3s ease-in;
   --animate-slide-in-left: slideInLeft 0.5s ease forwards;
   --animate-slide-out-left: slideOutLeft 0.5s ease forwards;
+  --animate-slide-in-right: slideInRight 0.5s ease forwards;
 
   @keyframes fade-in {
     0% {
@@ -50,6 +51,15 @@
       transform: translateX(100%);
     }
   }
+
+  @keyframes slideInRight {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
 }
 
 @layer utilities {
@@ -66,7 +76,7 @@
   }
 
   .animate-once {
-    animation-iteration-count: 1 !important;
+    animation-iteration-count: 0.25 !important;
     animation-fill-mode: forwards !important; /* keeps final state */
   }
 
@@ -102,5 +112,9 @@
 
   p {
     @apply font-medium text-[min(5vw,14px)];
+  }
+
+  svg path {
+    @apply stroke-text dark:stroke-text-dark;
   }
 }
