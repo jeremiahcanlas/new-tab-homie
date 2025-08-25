@@ -7,12 +7,12 @@ type GreetProp = {
 const Greet = ({ message }: GreetProp): React.JSX.Element => {
   const { username } = useDashboardSettings();
 
-  message = username
+  const personalizedGreeting = username
     ? message.replace("{{name}}", username)
     : message.replace(", {{name}}", "");
   return (
     <div className="uppercase max-w-[80vw]">
-      <h1 className="whitespace-nowrap">{message}</h1>
+      <h1 className="whitespace-nowrap">{personalizedGreeting}</h1>
     </div>
   );
 };
