@@ -5,7 +5,6 @@
     "messages": [
       "You're up late, {{name}}",
       "Can't sleep, {{name}}?",
-      "Late night coding session, {{name}}?",
       "The world is quiet, {{name}}... perfect time to think",
       "Only the night owls like you are awake, {{name}}"
     ]
