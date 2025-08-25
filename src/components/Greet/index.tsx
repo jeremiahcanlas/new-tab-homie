@@ -1,15 +1,12 @@
-import { useDashboardSettings } from "../../context/DashboardSettingsContext";
+import { usePersonalizedGreet } from "../../hooks/greet";
 
 type GreetProp = {
   message: string;
 };
 
 const Greet = ({ message }: GreetProp): React.JSX.Element => {
-  const { username } = useDashboardSettings();
+  const { personalizedGreeting } = usePersonalizedGreet(message);
 
-  const personalizedGreeting = username
-    ? message.replace("{{name}}", username)
-    : message.replace(", {{name}}", "");
   return (
     <div className="uppercase max-w-[80vw]">
       <h1 className="whitespace-nowrap">{personalizedGreeting}</h1>
