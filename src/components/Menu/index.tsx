@@ -17,6 +17,8 @@ const Menu = ({ isOpen }: Prop) => {
     setClockFormat,
     darkToggled,
     setDarkToggled,
+    isSearchToggled,
+    toggleSearch,
   } = useDashboardSettings();
 
   useEffect(() => {
@@ -105,7 +107,7 @@ const Menu = ({ isOpen }: Prop) => {
         <label className="flex items-center align-middle gap-3">
           <input
             type="checkbox"
-            name="featureToggle"
+            name="darkToggle"
             checked={darkToggled}
             onChange={() => setDarkToggled(!darkToggled)}
             className="sr-only peer"
@@ -120,6 +122,28 @@ const Menu = ({ isOpen }: Prop) => {
           </div>
 
           <p>toggle dark mode</p>
+        </label>
+      </div>
+
+      <div>
+        <label className="flex items-center align-middle gap-3">
+          <input
+            type="checkbox"
+            name="searchToggle"
+            checked={isSearchToggled}
+            onChange={() => toggleSearch(!isSearchToggled)}
+            className="sr-only peer"
+          />
+
+          <div className="w-9 h-4 bg-gray-500 duration-400 peer-checked:bg-gray-400 rounded-full relative transition-colors">
+            <div
+              className={`absolute left-1 top-1 w-2 h-2 bg-white rounded-[100%] duration-400 transition-transform  ${
+                isSearchToggled ? "translate-x-5" : ""
+              }`}
+            />
+          </div>
+
+          <p>toggle search bar</p>
         </label>
       </div>
     </div>

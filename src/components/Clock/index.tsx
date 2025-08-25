@@ -2,11 +2,12 @@ import { useClock } from "../../hooks/clock";
 
 const Clock = (): React.JSX.Element => {
   const { dateTime } = useClock();
+  const { currentTime, currentDate } = dateTime;
 
   return (
     <div>
-      <h1>{dateTime.currentTime}</h1>
-      <h2>{dateTime.currentDate}</h2>
+      <h1>{currentTime}</h1>
+      <h2>{currentDate}</h2>
     </div>
   );
 };

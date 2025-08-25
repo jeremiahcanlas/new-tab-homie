@@ -1,10 +1,20 @@
-import { useState } from "react";
-import useGoogleSuggestions from "../../hooks/search/useGoogleSuggestions";
+import { useEffect, useState } from "react";
+import { useDashboardSettings } from "../../context/DashboardSettingsContext";
+// import useGoogleSuggestions from "../../hooks/search/useGoogleSuggestions";
 
 const Search = (): React.JSX.Element => {
+  const { isSearchToggled } = useDashboardSettings();
+  // const { suggestions } = useGoogleSuggestions(query);
   const [query, setQuery] = useState("");
+  const [shouldRender, setShouldRender] = useState(isSearchToggled);
 
-  const { suggestions } = useGoogleSuggestions(query);
+  useEffect(() => {
+    if (isSearchToggled) setShouldRender(true);
+  }, [isSearchToggled]);
+
+  const handleAnimationEnd = () => {
+    if (!isSearchToggled) setShouldRender(false);
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -15,15 +25,26 @@ const Search = (): React.JSX.Element => {
     window.location.href = `${baseUrl}?q=${encodeURIComponent(query)}`;
   };
 
-  const handleSuggestionClick = (suggestion: string) => {
-    setQuery(suggestion);
-    const baseUrl = "https://www.google.com/search";
+  // const handleSuggestionClick = (suggestion: string) => {
+  //   setQuery(suggestion);
+  //   const baseUrl = "https://www.google.com/search";
 
-    window.location.href = `${baseUrl}?q=${encodeURIComponent(suggestion)}`;
-  };
+  //   window.location.href = `${baseUrl}?q=${encodeURIComponent(suggestion)}`;
+  // };
+
+  if (!shouldRender) return <></>;
 
   return (
-    <form onSubmit={handleSubmit} className="relative max-w-md mt-5">
+    <form
+      onSubmit={handleSubmit}
+      className={
+        "relative max-w-md mt-5" +
+        (isSearchToggled
+          ? " animate-slide-in-right"
+          : " animate-slide-out-right")
+      }
+      onAnimationEnd={handleAnimationEnd}
+    >
       <div className="flex">
         <input
           type="text"
@@ -39,7 +60,8 @@ const Search = (): React.JSX.Element => {
         </button>
       </div>
 
-      {suggestions.length > 0 && (
+      {/* TODO suggestions has CORS issue upon building */}
+      {/* {suggestions.length > 0 && (
         <ul className="absolute z-10 w-full bg-white dark:bg-background-dark-secondary border mt-1 rounded shadow">
           {suggestions.map((s, idx) => (
             <li
@@ -51,7 +73,7 @@ const Search = (): React.JSX.Element => {
             </li>
           ))}
         </ul>
-      )}
+      )} */}
     </form>
   );
 };

@@ -8,6 +8,7 @@ type LocationProps = {
 
 const Location = (props: LocationProps): React.JSX.Element => {
   const { location, error } = props;
+  const { city, stateProvince } = location;
 
   if (error)
     return (
@@ -21,8 +22,8 @@ const Location = (props: LocationProps): React.JSX.Element => {
       <span className="inline-block w-5 align-text-bottom">
         <LocationPin />
       </span>
-      {location.city}
-      {location.stateProvince ? ", " + location.stateProvince : ""}
+      {city}
+      {stateProvince ? ", " + stateProvince : ""}
     </h2>
   );
 };

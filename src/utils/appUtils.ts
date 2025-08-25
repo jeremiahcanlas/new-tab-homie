@@ -1,5 +1,5 @@
 import greetService from "../services/greet/greetingService";
-import quoteService from "../services/quote/QuoteService";
+import quoteService from "../services/quote/quoteService";
 
 export const getInitialProps = async () => {
   const greetingMessage = await greetService.getGreeting();

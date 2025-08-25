@@ -9,6 +9,8 @@ interface DashboardSettingsContextType {
   setClockFormat: (clockFormat: "12" | "24") => void;
   darkToggled: boolean;
   setDarkToggled: (darkToggled: boolean) => void;
+  isSearchToggled: boolean;
+  toggleSearch: (isSearchToggled: boolean) => void;
 }
 
 const DashboardSettingsContext = createContext<DashboardSettingsContextType>({
@@ -20,6 +22,8 @@ const DashboardSettingsContext = createContext<DashboardSettingsContextType>({
   setClockFormat: () => {},
   darkToggled: false,
   setDarkToggled: () => {},
+  isSearchToggled: false,
+  toggleSearch: () => {},
 });
 
 export const DashboardSettingsProvider: React.FC<{
@@ -48,6 +52,12 @@ export const DashboardSettingsProvider: React.FC<{
     return JSON.parse(stored);
   });
 
+  // dark mode toggle
+  const [isSearchToggled, toggleSearch] = useState<boolean>(() => {
+    const stored = localStorage.getItem("enableSearch") || "false";
+    return JSON.parse(stored);
+  });
+
   useEffect(() => {
     const shouldUseDark = darkToggled;
 
@@ -60,7 +70,8 @@ export const DashboardSettingsProvider: React.FC<{
     localStorage.setItem("username", username);
     localStorage.setItem("clockFormat", clockFormat);
     localStorage.setItem("darkToggled", JSON.stringify(darkToggled));
-  }, [unit, username, clockFormat, darkToggled]);
+    localStorage.setItem("enableSearch", JSON.stringify(isSearchToggled));
+  }, [unit, username, clockFormat, darkToggled, isSearchToggled]);
 
   // Sync changes from other tabs
   useEffect(() => {
@@ -90,6 +101,14 @@ export const DashboardSettingsProvider: React.FC<{
       ) {
         setDarkToggled(JSON.parse(e.newValue));
       }
+
+      if (
+        e.key === "enableSearch" &&
+        e.newValue &&
+        (e.newValue === "true" || e.newValue === "false")
+      ) {
+        toggleSearch(JSON.parse(e.newValue));
+      }
     };
     window.addEventListener("storage", syncSettings);
     return () => window.removeEventListener("storage", syncSettings);
@@ -106,6 +125,8 @@ export const DashboardSettingsProvider: React.FC<{
         setClockFormat,
         darkToggled,
         setDarkToggled,
+        isSearchToggled,
+        toggleSearch,
       }}
     >
       {children}
