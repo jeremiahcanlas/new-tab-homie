@@ -5,13 +5,15 @@ type QuoteProps = {
 const Quote = ({ quote }: QuoteProps): React.JSX.Element => {
   if (!quote) return <></>;
 
+  const { text, author } = quote;
+
   return (
     <div
-      key={quote.author}
+      key={author}
       className=" md:mt-auto border border-gray-300 rounded-sm p-5 w-full md:w-max md:max-w-[35%] shadow-md relative"
     >
-      <p className="font-light mr-3">{quote?.text}</p>
-      <p className="mt-2">{quote.author}</p>
+      <p className="font-light mr-3">{text}</p>
+      <p className="mt-2">{author}</p>
     </div>
   );
 };
