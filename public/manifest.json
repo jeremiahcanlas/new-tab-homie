@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "New Tab Homie",
   "version": "0.5.0",
-  "description": "New Tab Homie - a custom new tab dashboard showing location, weather, and quotes.",
+  "description": "New Tab Homie - Your Minimalist Personal Dashboard (Alpha)",
   "chrome_url_overrides": {
     "newtab": "index.html"
   },
