@@ -8,11 +8,13 @@ const getDateTime = (clockFormat: "12" | "24") => {
     currentDate: now
       .toLocaleString("en-US", { dateStyle: "full" })
       .toUpperCase(),
-    currentTime: now.toLocaleString("en-US", {
-      hour: "2-digit",
-      hour12: clockFormat === "12",
-      minute: "2-digit",
-    }),
+    currentTime: now
+      .toLocaleString("en-US", {
+        hour: "2-digit",
+        hour12: clockFormat === "12",
+        minute: "2-digit",
+      })
+      .replace(/ AM| PM/, ""),
   };
 };
 
