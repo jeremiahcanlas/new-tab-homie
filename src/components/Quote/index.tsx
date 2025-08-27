@@ -10,9 +10,9 @@ const Quote = ({ quote }: QuoteProps): React.JSX.Element => {
   return (
     <div
       key={author}
-      className=" md:mt-auto border border-gray-300 rounded-sm p-5 w-full md:w-max md:max-w-[35%] shadow-md relative"
+      className=" md:mt-auto border border-gray-300 rounded-sm p-5 w-full md:w-max md:max-w-[35%] shadow-outline relative"
     >
-      <p className="font-light mr-3">{text}</p>
+      <p className="font-semibold text-md mr-3">{text}</p>
       <p className="mt-2">{author}</p>
     </div>
   );
