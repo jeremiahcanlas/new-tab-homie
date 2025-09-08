@@ -6,7 +6,7 @@
   "chrome_url_overrides": {
     "newtab": "index.html"
   },
-  "permissions": ["storage", "offscreen", "geolocation"],
+  "permissions": ["storage", "geolocation"],
   "host_permissions": [
     "*://nominatim.openstreetmap.org/*",
     "*://api.quotable.io/*",
