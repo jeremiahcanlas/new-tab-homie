@@ -35,19 +35,19 @@ const Menu = ({ isOpen }: Prop) => {
     <div
       className={
         (isOpen ? "animate-slide-in-left" : "animate-slide-out-left") +
-        " bg-text-dark dark:bg-text w-[25%] p-[20px] flex flex-col gap-2"
+        " bg-text-dark dark:bg-text w-[370px] p-[20px] flex flex-col gap-2"
       }
       onAnimationEnd={handleAnimationEnd}
     >
-      <h1>Dashboard Settings</h1>
+      <h1 className="font-bold text-[1.5em]">Dashboard Settings</h1>
 
       <div>
-        <label className="block mb-1" htmlFor="username">
+        <label className="inline-block mb-1 mr-2" htmlFor="username">
           <p> Username:</p>
         </label>
         <input
           id="username"
-          className="bg-white text-text p-1"
+          className="bg-white dark:bg-gray-800 p-1.5 rounded"
           type="text"
           value={username}
           placeholder="Enter username"
@@ -105,6 +105,7 @@ const Menu = ({ isOpen }: Prop) => {
 
       <div>
         <label className="flex items-center align-middle gap-3">
+          <p>dark mode</p>
           <input
             type="checkbox"
             name="darkToggle"
@@ -120,13 +121,12 @@ const Menu = ({ isOpen }: Prop) => {
               }`}
             />
           </div>
-
-          <p>toggle dark mode</p>
         </label>
       </div>
 
       <div>
         <label className="flex items-center align-middle gap-3">
+          <p>show search bar</p>
           <input
             type="checkbox"
             name="searchToggle"
@@ -134,7 +134,6 @@ const Menu = ({ isOpen }: Prop) => {
             onChange={() => toggleSearch(!isSearchToggled)}
             className="sr-only peer"
           />
-
           <div className="w-9 h-4 bg-gray-500 duration-400 peer-checked:bg-gray-400 rounded-full relative transition-colors">
             <div
               className={`absolute left-1 top-1 w-2 h-2 bg-white rounded-[100%] duration-400 transition-transform  ${
@@ -142,8 +141,6 @@ const Menu = ({ isOpen }: Prop) => {
               }`}
             />
           </div>
-
-          <p>toggle search bar</p>
         </label>
       </div>
     </div>
