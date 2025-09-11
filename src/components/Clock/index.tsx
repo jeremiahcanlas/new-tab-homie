@@ -5,9 +5,11 @@ const Clock = (): React.JSX.Element => {
   const { currentTime, currentDate } = dateTime;
 
   return (
-    <div>
-      <h1>{currentTime}</h1>
-      <h2>{currentDate}</h2>
+    <div className="my-4">
+      <h2 className="font-bold">{currentDate}</h2>
+      <h1 className="text-[min(30vw,55px)] font-light leading-none">
+        {currentTime}
+      </h1>
     </div>
   );
 };

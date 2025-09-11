@@ -18,7 +18,7 @@ const Location = (props: LocationProps): React.JSX.Element => {
     );
 
   return (
-    <h2 className="align-middle">
+    <h2 className="align-middle font-bold text-[min(30vw,0.9em)]">
       <span className="inline-block w-5 align-text-bottom">
         <LocationPin />
       </span>

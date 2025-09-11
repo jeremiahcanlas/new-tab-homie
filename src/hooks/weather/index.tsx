@@ -26,6 +26,7 @@ export const useWeather = () => {
       }
 
       const weatherData = await weatherService.getCurrentWeather(coords, unit);
+
       setWeather(weatherData);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unknown error");
@@ -35,10 +36,10 @@ export const useWeather = () => {
   }, [unit]);
 
   useEffect(() => {
-    if (hasFetched.current) return;
-    hasFetched.current = true;
-
-    fetchWeather();
+    if (!hasFetched.current) {
+      hasFetched.current = true;
+      fetchWeather();
+    }
   }, [fetchWeather]);
 
   return { weather, loading, error };

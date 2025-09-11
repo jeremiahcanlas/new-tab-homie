@@ -38,7 +38,7 @@ const Search = (): React.JSX.Element => {
     <form
       onSubmit={handleSubmit}
       className={
-        "relative max-w-md mt-5" +
+        "relative max-w-md mt-5 shadow-outline" +
         (isSearchToggled
           ? " animate-slide-in-right"
           : " animate-slide-out-right")

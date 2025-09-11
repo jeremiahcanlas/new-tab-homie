@@ -27,7 +27,7 @@ const GearButton = ({
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }): React.JSX.Element => (
   <div
-    className="w-12 absolute right-12 bottom-10 hover:animate-spin animate-once"
+    className="w-12 absolute right-12 bottom-10 hover:animate-spin animate-once cursor-pointer"
     onClick={() => setIsOpen(!isOpen)}
   >
     <GearIcon />
@@ -47,10 +47,10 @@ const Forecast = (): React.JSX.Element => {
   } = useLocation();
 
   if (locationLoading || weatherLoading || !weather || !location)
-    return <div className="h-[87px]" />;
+    return <div className="h-[97.41px]" />;
 
   return (
-    <div className="flex flex-col gap-2 border border-gray-300 rounded p-1.5 w-[min(80vw,220px)] shadow-md animate-slide-in-right">
+    <div className="flex flex-col gap-2 border border-gray-300 rounded p-1.5 w-[min(80vw,220px)] shadow-outline animate-slide-in-right">
       <Weather weather={weather} error={weatherError} />
       <Location location={location} error={locationError} />
     </div>
@@ -61,7 +61,7 @@ const Dashboard = ({ greetingMessage, quote }: AppProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="h-screen flex flex-row overflow-hidden animate-fade-in">
+    <div className="h-screen flex flex-row overflow-hidden">
       <div
         className="main-container"
         onClick={() => isOpen && setIsOpen(false)}
