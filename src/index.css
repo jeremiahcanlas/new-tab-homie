@@ -2,14 +2,18 @@
 @import "tailwindcss";
 
 :root {
-  font-family: Montserrat, sans-serif;
+  font-family: "Montserrat", sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: "Montserrat", sans-serif;
+  font-size: 100%;
 }
 
 @custom-variant dark (&:where(.dark, .dark *));

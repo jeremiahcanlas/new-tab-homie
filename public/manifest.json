@@ -11,5 +11,8 @@
     "*://nominatim.openstreetmap.org/*",
     "*://api.quotable.io/*",
     "*://api.open-meteo.com/*"
-  ]
+  ],
+  "content_security_policy": {
+    "extension_pages": "font-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; style-src 'self' 'unsafe-inline';"
+  }
 }
