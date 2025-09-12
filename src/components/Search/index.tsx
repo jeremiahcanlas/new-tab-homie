@@ -21,6 +21,7 @@ const Search = (): React.JSX.Element => {
           ? " animate-slide-in-right"
           : " animate-slide-out-right")
       }
+      role="search-form"
       onAnimationEnd={handleAnimationEnd}
     >
       <div className="flex">
