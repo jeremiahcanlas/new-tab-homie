@@ -8,18 +8,17 @@ vi.mock("../../hooks/clock");
 const mockUseClock = vi.mocked(useClock);
 
 describe("Clock", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   const mockDateTime = {
     currentTime: "11:07",
     currentDate: "Thursday, September 11",
   };
 
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it("renders current date & time from hook", () => {
     // Arrange
-
     mockUseClock.mockReturnValue({
       dateTime: mockDateTime,
     });
@@ -49,10 +48,8 @@ describe("Clock", () => {
 
     expect(clock).toHaveTextContent("11:07");
 
-    mockDateTime.currentTime = "11:08";
-
-    mockUseClock.mockReturnValue({
-      dateTime: mockDateTime,
+    mockUseClock.mockReturnValueOnce({
+      dateTime: { ...mockDateTime, currentTime: "11:08" },
     });
 
     rerender(<Clock />);
@@ -73,10 +70,8 @@ describe("Clock", () => {
 
     expect(date).toHaveTextContent("Thursday, September 11");
 
-    mockDateTime.currentDate = "Thursday, September 12";
-
-    mockUseClock.mockReturnValue({
-      dateTime: mockDateTime,
+    mockUseClock.mockReturnValueOnce({
+      dateTime: { ...mockDateTime, currentDate: "Thursday, September 12" },
     });
 
     rerender(<Clock />);
@@ -86,11 +81,8 @@ describe("Clock", () => {
 
   it("handles empty string from custom hook", () => {
     // Arrange
-    mockDateTime.currentDate = "";
-    mockDateTime.currentTime = "";
-
-    mockUseClock.mockReturnValue({
-      dateTime: mockDateTime,
+    mockUseClock.mockReturnValueOnce({
+      dateTime: { currentDate: "", currentTime: "" },
     });
 
     // Act
@@ -100,7 +92,7 @@ describe("Clock", () => {
     const clock = getByRole("heading", { level: 1 });
     const date = getByRole("heading", { level: 2 });
 
-    expect(clock).toHaveTextContent(mockDateTime.currentTime);
-    expect(date).toHaveTextContent(mockDateTime.currentDate);
+    expect(clock).toHaveTextContent("");
+    expect(date).toHaveTextContent("");
   });
 });
