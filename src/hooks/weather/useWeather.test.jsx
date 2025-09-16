@@ -4,7 +4,6 @@ import { useWeather } from ".";
 import coordinatesService from "../../services/coordinates/coordinatesService";
 import weatherService from "../../services/weather/weatherService";
 import { useDashboardSettings } from "../../context/DashboardSettingsContext";
-import React from "react";
 
 // Mock fetch globally
 global.fetch = vi.fn();

@@ -4,19 +4,23 @@ import { useDashboardSettings } from "../../context/DashboardSettingsContext";
 const getDateTime = (clockFormat: "12" | "24") => {
   const now = new Date();
 
+  const currentDate = now.toLocaleString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+  });
+
+  const currentTime = now
+    .toLocaleString("en-US", {
+      hour: "2-digit",
+      hour12: clockFormat === "12",
+      minute: "2-digit",
+    })
+    .replace(/ AM| PM/, "");
+
   return {
-    currentDate: now.toLocaleString("en-US", {
-      weekday: "long",
-      month: "long",
-      day: "numeric",
-    }),
-    currentTime: now
-      .toLocaleString("en-US", {
-        hour: "2-digit",
-        hour12: clockFormat === "12",
-        minute: "2-digit",
-      })
-      .replace(/ AM| PM/, ""),
+    currentDate,
+    currentTime,
   };
 };
 
