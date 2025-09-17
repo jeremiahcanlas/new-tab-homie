@@ -26,11 +26,6 @@ export const useSearch = () => {
           text: query,
           disposition: "CURRENT_TAB",
         });
-      } else {
-        // Fallback just incase
-        window.location.href = `https://www.google.com/search?q=${encodeURIComponent(
-          query
-        )}`;
       }
     } catch (error) {
       console.error("Search failed:", error);
