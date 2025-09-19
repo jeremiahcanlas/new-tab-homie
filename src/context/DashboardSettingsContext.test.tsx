@@ -1,27 +1,13 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import {
-  describe,
-  it,
-  expect,
-  vi,
-  beforeEach,
-  afterEach,
-  type MockedFunction,
-} from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import type { MockedFunction } from "vitest";
 import {
   DashboardSettingsProvider,
   useDashboardSettings,
 } from "./DashboardSettingsContext";
 
-// Store original methods
-// const originalGetItem = localStorage.getItem;
-// const originalSetItem = localStorage.setItem;
-// const originalAddEventListener = window.addEventListener;
-// const originalRemoveEventListener = window.removeEventListener;
-
 describe("DashboardSettingsContext", () => {
   beforeEach(() => {
-    // Mock localStorage methods with proper typing
     const mockGetItem = vi.fn(() => null);
     const mockSetItem = vi.fn(() => {});
 
@@ -57,7 +43,9 @@ describe("DashboardSettingsContext", () => {
       <div>
         <div data-testid="unit">{context.unit}</div>
         <div data-testid="username">{context.username}</div>
+        <div data-testid="clock">{context.clockFormat}</div>
         <div data-testid="dark">{context.darkToggled.toString()}</div>
+        <div data-testid="search">{context.isSearchToggled.toString()}</div>
         <button
           data-testid="set-fahrenheit"
           onClick={() => context.setUnit("fahrenheit")}
