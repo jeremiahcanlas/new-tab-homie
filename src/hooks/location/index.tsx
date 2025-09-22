@@ -22,8 +22,8 @@ export const useLocation = () => {
         throw new Error("Could not get coordinates");
       }
 
-      const weatherData = await locationService.getLocation(coords);
-      setLocation(weatherData);
+      const locationData = await locationService.getLocation(coords);
+      setLocation(locationData);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unknown error");
     } finally {
@@ -32,10 +32,11 @@ export const useLocation = () => {
   }, []);
 
   useEffect(() => {
-    if (hasFetched.current) return;
-    hasFetched.current = true;
+    if (!hasFetched.current) {
+      hasFetched.current = true;
 
-    fetchLocation();
+      fetchLocation();
+    }
   }, [fetchLocation]);
 
   return { location, loading, error };
