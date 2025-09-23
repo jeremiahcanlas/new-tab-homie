@@ -10,15 +10,17 @@ const coordinatesService: CoordinatesProvider = {
     return new Promise((resolve) => {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          const newCoords = {
-            lat: parseFloat(position.coords.latitude.toFixed(5)),
-            lon: parseFloat(position.coords.longitude.toFixed(5)),
-          };
-
           const cachedCoordsRaw = localStorage.getItem("user_coords");
           const cachedCoords = cachedCoordsRaw
             ? JSON.parse(cachedCoordsRaw)
             : null;
+
+          const { latitude, longitude } = position.coords;
+
+          const newCoords = {
+            lat: parseFloat(latitude.toFixed(5)),
+            lon: parseFloat(longitude.toFixed(5)),
+          };
 
           const coordsChanged =
             !cachedCoords ||
