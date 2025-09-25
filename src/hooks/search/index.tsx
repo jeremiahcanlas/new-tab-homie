@@ -17,10 +17,11 @@ export const useSearch = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (!query.trim()) return;
 
     try {
-      if (chrome?.search?.query) {
+      if (chrome.search.query) {
         // Uses chrome.search as per policy - https://developer.chrome.com/docs/extensions/reference/api/search
         await chrome.search.query({
           text: query,
@@ -29,8 +30,7 @@ export const useSearch = () => {
       }
     } catch (error) {
       console.error("Search failed:", error);
-
-      // Fallback just incase
+      // Fallback for local testing or if chrome.search errors
       window.location.href = `https://www.google.com/search?q=${encodeURIComponent(
         query
       )}`;
