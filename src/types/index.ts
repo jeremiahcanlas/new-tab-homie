@@ -12,3 +12,8 @@ export type WeatherData = {
   weatherStatus: string;
   feelsLike: number;
 };
+
+export type QuoteData = {
+  author: string;
+  text: string;
+};

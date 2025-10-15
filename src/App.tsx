@@ -57,7 +57,7 @@ const Forecast = (): React.JSX.Element => {
   );
 };
 
-const Dashboard = ({ greetingMessage, quote }: AppProps) => {
+const Dashboard = ({ greetingMessage }: AppProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -70,7 +70,7 @@ const Dashboard = ({ greetingMessage, quote }: AppProps) => {
         <Clock />
         <Forecast />
         <Search />
-        <Quote quote={quote} />
+        <Quote />
       </div>
       <Menu isOpen={isOpen} />
       <GearButton isOpen={isOpen} setIsOpen={setIsOpen} />
