@@ -40,5 +40,5 @@ export const useQuote = () => {
     }
   }, [fetchQuote]);
 
-  return { quote, loading, error, refresh: fetchQuote };
+  return { quote, loading, error };
 };
