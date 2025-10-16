@@ -1,11 +1,9 @@
 import { usePersonalizedGreet } from "../../hooks/greet";
 
-type GreetProp = {
-  message: string;
-};
+const Greet = (): React.JSX.Element => {
+  const { personalizedGreeting } = usePersonalizedGreet();
 
-const Greet = ({ message }: GreetProp): React.JSX.Element => {
-  const { personalizedGreeting } = usePersonalizedGreet(message);
+  if (!personalizedGreeting) return <div className="h-[28.8px] invisible" />;
 
   return (
     <div className="uppercase max-w-[80vw]">
