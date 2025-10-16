@@ -64,7 +64,7 @@ describe("Search", () => {
   });
 
   describe("CSS Classes and Animation", () => {
-    it("applies slide-in-right animation class when isSearchToggled is true", () => {
+    it("applies fade in animation class when isSearchToggled is true", () => {
       mockUseSearch.mockReturnValue({
         ...defaultMockReturn,
         isSearchToggled: true,
@@ -73,7 +73,7 @@ describe("Search", () => {
       const { getByRole } = render(<Search />);
 
       const form = getByRole("search-form");
-      expect(form).toHaveClass("animate-slide-in-right");
+      expect(form).toHaveClass("animate-fade-in");
       expect(form).not.toHaveClass("animate-slide-out-right");
     });
 
@@ -96,9 +96,10 @@ describe("Search", () => {
       const form = getByRole("search-form");
       expect(form).toHaveClass(
         "relative",
-        "max-w-md",
-        "mt-5",
-        "shadow-outline"
+        "max-w-2xl",
+        "mt-20",
+        "shadow-outline",
+        "mx-auto"
       );
     });
   });
