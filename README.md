@@ -91,23 +91,7 @@ nvm use 20.19.4
 
 ### Setting as Default New Tab
 
-To use Homie Dashboard as your browser's new tab page:
-
-1. **Build the project**
-
-   ```bash
-   npm run build
-   ```
-
-2. **Load as Chrome Extension**
-
-   - Open Chrome and navigate to [chrome://extensions](chrome://extensions)
-   - Enable "Developer mode" (toggle in the top right)
-   - Click "Load unpacked"
-   - Select the `dist` folder from your project directory
-   - Enable the extension
-
-3. **Enjoy!** Open a new tab to see your personalized dashboard
+You can download it [here](https://chromewebstore.google.com/detail/new-tab-homie/fompnhapcdbjbekdabkplcddnmmapbko?authuser=0&hl=en)
 
 ### Configuration
 
@@ -124,7 +108,7 @@ npm run dev          # Start development server
 npm run build        # Build for production
 npm run preview      # Preview production build
 npm run lint         # Run ESLint
-npm run type-check   # Run TypeScript compiler check
+npm run test         # Run vitest for testing
 ```
 
 ### Project Structure
@@ -132,16 +116,17 @@ npm run type-check   # Run TypeScript compiler check
 ```
 homie-dashboard/
 ├── src/
-│   ├── components/     # React components
-│   ├── context/        # React Context providers for state management
+│   ├── components/    # Dashboard components
+│   ├── context/       # React Context providers for state management
 │   ├── data/          # Static data files and constants
 │   ├── hooks/         # Custom React hooks
 │   ├── services/      # API calls and external service integrations
+│   ├── test/          # Test setup
 │   ├── types/         # TypeScript type definitions
 │   ├── utils/         # Utility functions and helpers
 │   └── App.tsx        # Main application component
 ├── public/            # Static assets
-└── dist/             # Production build output
+└── dist/              # Production build output
 ```
 
 ---
@@ -168,7 +153,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - Weather data provided by [Open-Meteo Weather Forecast API](https://open-meteo.com/en/docs)
 - Reverse geolocation provided by [Nominatim API](https://nominatim.org/)
-- Inspirational quotes from [Quotable API](https://quotable.io/)
 - SVGS from [SVGRepo](https://www.svgrepo.com/)
 
 ---
@@ -180,5 +164,5 @@ If you have any questions or run into issues, please [open an issue](https://git
 ---
 
 <div align="center">
-  Made by <a href="https://github.com/jeremiahcanlas">Jeremiah Canlas</a>
+  Developed/Designed by <a href="https://github.com/jeremiahcanlas">Jeremiah Canlas</a>
 </div>
