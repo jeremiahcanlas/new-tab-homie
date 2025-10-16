@@ -123,7 +123,6 @@ homie-dashboard/
 │   ├── services/      # API calls and external service integrations
 │   ├── test/          # Test setup
 │   ├── types/         # TypeScript type definitions
-│   ├── utils/         # Utility functions and helpers
 │   └── App.tsx        # Main application component
 ├── public/            # Static assets
 └── dist/              # Production build output
