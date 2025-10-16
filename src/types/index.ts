@@ -17,3 +17,16 @@ export type QuoteData = {
   author: string;
   text: string;
 };
+
+export interface DashboardSettingsContextType {
+  unit: "celsius" | "fahrenheit";
+  setUnit: (unit: "celsius" | "fahrenheit") => void;
+  username: string | undefined;
+  setUsername: (username: string) => void;
+  clockFormat: "12" | "24";
+  setClockFormat: (clockFormat: "12" | "24") => void;
+  darkToggled: boolean;
+  setDarkToggled: (darkToggled: boolean) => void;
+  isSearchToggled: boolean;
+  toggleSearch: (isSearchToggled: boolean) => void;
+}

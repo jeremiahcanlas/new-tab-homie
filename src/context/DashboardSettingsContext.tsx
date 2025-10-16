@@ -1,17 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-
-interface DashboardSettingsContextType {
-  unit: "celsius" | "fahrenheit";
-  setUnit: (unit: "celsius" | "fahrenheit") => void;
-  username: string;
-  setUsername: (username: string) => void;
-  clockFormat: "12" | "24";
-  setClockFormat: (clockFormat: "12" | "24") => void;
-  darkToggled: boolean;
-  setDarkToggled: (darkToggled: boolean) => void;
-  isSearchToggled: boolean;
-  toggleSearch: (isSearchToggled: boolean) => void;
-}
+import type { DashboardSettingsContextType } from "../types";
 
 const DashboardSettingsContext = createContext<DashboardSettingsContextType>({
   unit: "celsius",
