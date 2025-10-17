@@ -14,7 +14,7 @@ describe("Greet", () => {
 
   it("renders personalized greeting from hook", () => {
     // Arrange
-    const mockMessage = "Hello";
+
     const mockPersonalizedGreeting = "Hello, John!";
 
     mockUsePersonalizedGreet.mockReturnValue({
@@ -22,7 +22,7 @@ describe("Greet", () => {
     });
 
     // Act
-    const { getByRole } = render(<Greet message={mockMessage} />);
+    const { getByRole } = render(<Greet />);
 
     // Assert
     const heading = getByRole("heading", { level: 1 });
@@ -32,16 +32,14 @@ describe("Greet", () => {
 
   it("passes message prop to usePersonalizedGreet hook", () => {
     // Arrange
-    const mockMessage = "Good morning";
     mockUsePersonalizedGreet.mockReturnValue({
       personalizedGreeting: "Good morning, Sarah!",
     });
 
     // Act
-    render(<Greet message={mockMessage} />);
+    render(<Greet />);
 
     // Assert
-    expect(mockUsePersonalizedGreet).toHaveBeenCalledWith(mockMessage);
     expect(mockUsePersonalizedGreet).toHaveBeenCalledTimes(1);
   });
 
@@ -52,10 +50,10 @@ describe("Greet", () => {
     });
 
     // Act
-    const { getByRole } = render(<Greet message="" />);
+    const { container } = render(<Greet />);
 
     // Assert
-    const heading = getByRole("heading", { level: 1 });
-    expect(heading).toHaveTextContent("");
+    expect(container).toHaveTextContent("");
+    expect(container).not.toHaveClass("uppercase max-w-[80vw]");
   });
 });

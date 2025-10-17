@@ -14,11 +14,6 @@ import { useWeather } from "./hooks/weather";
 import { useLocation } from "./hooks/location";
 import Search from "./components/Search";
 
-type AppProps = {
-  greetingMessage: string;
-  quote?: { author: string; text: string } | null;
-};
-
 const GearButton = ({
   isOpen,
   setIsOpen,
@@ -57,7 +52,7 @@ const Forecast = (): React.JSX.Element => {
   );
 };
 
-const Dashboard = ({ greetingMessage, quote }: AppProps) => {
+const Dashboard = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -66,11 +61,11 @@ const Dashboard = ({ greetingMessage, quote }: AppProps) => {
         className="main-container"
         onClick={() => isOpen && setIsOpen(false)}
       >
-        <Greet message={greetingMessage} />
+        <Greet />
         <Clock />
         <Forecast />
         <Search />
-        <Quote quote={quote} />
+        <Quote />
       </div>
       <Menu isOpen={isOpen} />
       <GearButton isOpen={isOpen} setIsOpen={setIsOpen} />
@@ -78,10 +73,10 @@ const Dashboard = ({ greetingMessage, quote }: AppProps) => {
   );
 };
 
-function App(props: AppProps) {
+function App() {
   return (
     <DashboardSettingsProvider>
-      <Dashboard {...props} />
+      <Dashboard />
     </DashboardSettingsProvider>
   );
 }

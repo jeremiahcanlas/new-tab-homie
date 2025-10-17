@@ -1,422 +1,251 @@
-import { renderHook } from "@testing-library/react";
-import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
-
-import { usePersonalizedGreet } from "."; // Adjust import path as needed
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { renderHook, waitFor } from "@testing-library/react";
+import { usePersonalizedGreet } from ".";
 import { useDashboardSettings } from "../../context/DashboardSettingsContext";
-import type { ReactNode } from "react";
+import greetService from "../../services/greet/greetingService";
+import type { DashboardSettingsContextType } from "../../types";
 
-// Mock the context
+// Mock the dependencies
 vi.mock("../../context/DashboardSettingsContext", () => ({
   useDashboardSettings: vi.fn(),
 }));
 
-const mockUseDashboardSettings = vi.mocked(useDashboardSettings);
+vi.mock("../../services/greet/greetingService", () => ({
+  default: {
+    getGreeting: vi.fn(),
+  },
+}));
 
-// Mock wrapper component for testing
-const createWrapper = (username?: string) => {
-  return ({ children }: { children: ReactNode }) => {
-    mockUseDashboardSettings.mockReturnValue({
-      username,
-    } as keyof typeof useDashboardSettings);
-    return <>{children}</>;
-  };
-};
+const mockUseDashboardSettings = vi.mocked(useDashboardSettings);
+const mockGetGreeting = vi.mocked(greetService.getGreeting);
 
 describe("usePersonalizedGreet", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
+  describe("Basic Functionality", () => {
+    it("fetches greeting on mount", async () => {
+      mockUseDashboardSettings.mockReturnValue({
+        username: "",
+      } as DashboardSettingsContextType);
+      mockGetGreeting.mockResolvedValue("Hello, {{name}}");
 
-  describe("with username provided", () => {
-    const username = "John";
+      renderHook(() => usePersonalizedGreet());
 
-    it("should replace {{name}} placeholder with username", () => {
-      const wrapper = createWrapper(username);
-      const { result } = renderHook(
-        () => usePersonalizedGreet("Hello, {{name}}!"),
-        { wrapper }
-      );
-
-      expect(result.current.personalizedGreeting).toBe("Hello, John!");
+      expect(mockGetGreeting).toHaveBeenCalledTimes(1);
     });
 
-    it("should handle greetings with {{name}} at the beginning", () => {
-      const wrapper = createWrapper(username);
-      const { result } = renderHook(
-        () => usePersonalizedGreet("{{name}}, welcome back!"),
-        { wrapper }
-      );
+    it("returns empty string initially", () => {
+      mockUseDashboardSettings.mockReturnValue({
+        username: "",
+      } as DashboardSettingsContextType);
+      mockGetGreeting.mockResolvedValue("Hello, {{name}}");
 
-      expect(result.current.personalizedGreeting).toBe("John, welcome back!");
-    });
-
-    it("should handle greetings with {{name}} in the middle", () => {
-      const wrapper = createWrapper(username);
-      const { result } = renderHook(
-        () => usePersonalizedGreet("Welcome back, {{name}}, to the dashboard"),
-        { wrapper }
-      );
-
-      expect(result.current.personalizedGreeting).toBe(
-        "Welcome back, John, to the dashboard"
-      );
-    });
-
-    it("should handle greetings with {{name}} at the end", () => {
-      const wrapper = createWrapper(username);
-      const { result } = renderHook(
-        () => usePersonalizedGreet("Good morning, {{name}}"),
-        { wrapper }
-      );
-
-      expect(result.current.personalizedGreeting).toBe("Good morning, John");
-    });
-
-    it("should handle case-sensitive placeholder matching", () => {
-      const wrapper = createWrapper(username);
-      const { result } = renderHook(
-        () => usePersonalizedGreet("Hello {{NAME}} and {{name}}"),
-        { wrapper }
-      );
-
-      // Should only replace exact {{name}} matches
-      expect(result.current.personalizedGreeting).toBe(
-        "Hello {{NAME}} and John"
-      );
-    });
-
-    it("should handle greetings without placeholders", () => {
-      const wrapper = createWrapper(username);
-      const { result } = renderHook(
-        () => usePersonalizedGreet("Good morning!"),
-        { wrapper }
-      );
-
-      expect(result.current.personalizedGreeting).toBe("Good morning!");
-    });
-
-    it("should handle empty greeting string", () => {
-      const wrapper = createWrapper(username);
-      const { result } = renderHook(() => usePersonalizedGreet(""), {
-        wrapper,
-      });
+      const { result } = renderHook(() => usePersonalizedGreet());
 
       expect(result.current.personalizedGreeting).toBe("");
     });
 
-    it("should handle special characters in username", () => {
-      const wrapper = createWrapper("José-María");
-      const { result } = renderHook(
-        () => usePersonalizedGreet("Hello, {{name}}!"),
-        { wrapper }
-      );
+    it("updates personalizedGreeting after fetching greeting", async () => {
+      mockUseDashboardSettings.mockReturnValue({
+        username: "",
+      } as DashboardSettingsContextType);
+      mockGetGreeting.mockResolvedValue("Hello, {{name}}");
 
-      expect(result.current.personalizedGreeting).toBe("Hello, José-María!");
-    });
+      const { result } = renderHook(() => usePersonalizedGreet());
 
-    it("should handle whitespace in username", () => {
-      const wrapper = createWrapper("John Doe");
-      const { result } = renderHook(
-        () => usePersonalizedGreet("Welcome, {{name}}"),
-        { wrapper }
-      );
-
-      expect(result.current.personalizedGreeting).toBe("Welcome, John Doe");
-    });
-  });
-
-  describe("without username (empty or undefined)", () => {
-    it('should remove ", {{name}}" pattern when username is empty string', () => {
-      const wrapper = createWrapper("");
-      const { result } = renderHook(
-        () => usePersonalizedGreet("Hello, {{name}}!"),
-        { wrapper }
-      );
-
-      expect(result.current.personalizedGreeting).toBe("Hello!");
-    });
-
-    it('should remove ", {{name}}" pattern when username is undefined', () => {
-      const wrapper = createWrapper(undefined);
-      const { result } = renderHook(
-        () => usePersonalizedGreet("Hello, {{name}}!"),
-        { wrapper }
-      );
-
-      expect(result.current.personalizedGreeting).toBe("Hello!");
-    });
-
-    // it("should handle {{name}} without comma when no username", () => {
-    //   const wrapper = createWrapper("");
-    //   const { result } = renderHook(
-    //     () => usePersonalizedGreet("Hello {{name}}!"),
-    //     { wrapper }
-    //   );
-
-    //   expect(result.current.personalizedGreeting).toBe("Hello !");
-    // });
-
-    // it('should handle multiple ", {{name}}" patterns when no username', () => {
-    //   const wrapper = createWrapper("");
-    //   const { result } = renderHook(
-    //     () => usePersonalizedGreet("Hello, {{name}}! Welcome back, {{name}}"),
-    //     { wrapper }
-    //   );
-
-    //   expect(result.current.personalizedGreeting).toBe("Hello! Welcome back");
-    // });
-
-    it('should handle greeting with only ", {{name}}" pattern', () => {
-      const wrapper = createWrapper("");
-      const { result } = renderHook(() => usePersonalizedGreet(", {{name}}"), {
-        wrapper,
+      await waitFor(() => {
+        expect(result.current.personalizedGreeting).toBe("Hello");
       });
-
-      expect(result.current.personalizedGreeting).toBe("");
-    });
-
-    it("should handle complex patterns with multiple commas", () => {
-      const wrapper = createWrapper("");
-      const { result } = renderHook(
-        () => usePersonalizedGreet("Good morning, {{name}}, how are you?"),
-        { wrapper }
-      );
-
-      // Should remove ", {{name}}" but keep other commas
-      expect(result.current.personalizedGreeting).toBe(
-        "Good morning, how are you?"
-      );
     });
   });
 
-  describe("prop changes and effects", () => {
-    it("should update greeting when greet prop changes", () => {
-      const wrapper = createWrapper("Alice");
-      const { result, rerender } = renderHook(
-        (props) => usePersonalizedGreet(props.greet),
-        {
-          wrapper,
-          initialProps: { greet: "Hello, {{name}}!" },
-        }
-      );
+  describe("With Username", () => {
+    it("replaces {{name}} with username when username is provided", async () => {
+      mockUseDashboardSettings.mockReturnValue({
+        username: "John",
+      } as DashboardSettingsContextType);
+      mockGetGreeting.mockResolvedValue("Hello, {{name}}");
 
-      expect(result.current.personalizedGreeting).toBe("Hello, Alice!");
+      const { result } = renderHook(() => usePersonalizedGreet());
 
-      // Change the greet prop
-      rerender({ greet: "Good morning, {{name}}" });
-
-      expect(result.current.personalizedGreeting).toBe("Good morning, Alice");
+      await waitFor(() => {
+        expect(result.current.personalizedGreeting).toBe("Hello, John");
+      });
     });
 
-    it("should update greeting when username changes", () => {
-      // Start with username
+    it("handles username with special characters", async () => {
       mockUseDashboardSettings.mockReturnValue({
-        username: "Bob",
-      } as keyof typeof useDashboardSettings);
-      const { result, rerender } = renderHook(() =>
-        usePersonalizedGreet("Welcome, {{name}}!")
-      );
+        username: "O'Brien",
+      } as DashboardSettingsContextType);
+      mockGetGreeting.mockResolvedValue("Welcome, {{name}}!");
 
-      expect(result.current.personalizedGreeting).toBe("Welcome, Bob!");
+      const { result } = renderHook(() => usePersonalizedGreet());
 
-      // Change username
-      mockUseDashboardSettings.mockReturnValue({
-        username: "Carol",
-      } as keyof typeof useDashboardSettings);
-      rerender();
-
-      expect(result.current.personalizedGreeting).toBe("Welcome, Carol!");
+      await waitFor(() => {
+        expect(result.current.personalizedGreeting).toBe("Welcome, O'Brien!");
+      });
     });
 
-    it("should update greeting when username changes from empty to populated", () => {
-      // Start without username
+    it("handles long usernames", async () => {
+      mockUseDashboardSettings.mockReturnValue({
+        username: "VeryLongUsernameThatIsQuiteLengthy",
+      } as DashboardSettingsContextType);
+      mockGetGreeting.mockResolvedValue("Hi, {{name}}");
+
+      const { result } = renderHook(() => usePersonalizedGreet());
+
+      await waitFor(() => {
+        expect(result.current.personalizedGreeting).toBe(
+          "Hi, VeryLongUsernameThatIsQuiteLengthy"
+        );
+      });
+    });
+  });
+
+  describe("Without Username", () => {
+    it('removes ", {{name}}" when username is empty', async () => {
       mockUseDashboardSettings.mockReturnValue({
         username: "",
-      } as keyof typeof useDashboardSettings);
-      const { result, rerender } = renderHook(() =>
-        usePersonalizedGreet("Hello, {{name}}!")
-      );
+      } as DashboardSettingsContextType);
+      mockGetGreeting.mockResolvedValue("Good morning, {{name}}");
 
-      expect(result.current.personalizedGreeting).toBe("Hello!");
+      const { result } = renderHook(() => usePersonalizedGreet());
 
-      // Add username
-      mockUseDashboardSettings.mockReturnValue({
-        username: "Dave",
-      } as keyof typeof useDashboardSettings);
-      rerender();
-
-      expect(result.current.personalizedGreeting).toBe("Hello, Dave!");
+      await waitFor(() => {
+        expect(result.current.personalizedGreeting).toBe("Good morning");
+      });
     });
 
-    it("should update greeting when username changes from populated to empty", () => {
-      // Start with username
+    it('removes ", {{name}}" when username is undefined', async () => {
       mockUseDashboardSettings.mockReturnValue({
-        username: "Eve",
-      } as keyof typeof useDashboardSettings);
-      const { result, rerender } = renderHook(() =>
-        usePersonalizedGreet("Good bye, {{name}}!")
-      );
+        username: undefined,
+      } as DashboardSettingsContextType);
+      mockGetGreeting.mockResolvedValue("Welcome back, {{name}}");
 
-      expect(result.current.personalizedGreeting).toBe("Good bye, Eve!");
+      const { result } = renderHook(() => usePersonalizedGreet());
 
-      // Remove username
+      await waitFor(() => {
+        expect(result.current.personalizedGreeting).toBe("Welcome back");
+      });
+    });
+
+    it("handles greeting without placeholder", async () => {
       mockUseDashboardSettings.mockReturnValue({
         username: "",
-      } as keyof typeof useDashboardSettings);
-      rerender();
+      } as DashboardSettingsContextType);
+      mockGetGreeting.mockResolvedValue("Hello there");
 
-      expect(result.current.personalizedGreeting).toBe("Good bye!");
+      const { result } = renderHook(() => usePersonalizedGreet());
+
+      await waitFor(() => {
+        expect(result.current.personalizedGreeting).toBe("Hello there");
+      });
+    });
+  });
+
+  describe("Different Greeting Formats", () => {
+    it("handles greeting with multiple placeholders (only replaces first)", async () => {
+      mockUseDashboardSettings.mockReturnValue({
+        username: "David",
+      } as DashboardSettingsContextType);
+      mockGetGreeting.mockResolvedValue(
+        "Hello, {{name}}! Nice to see you, {{name}}"
+      );
+
+      const { result } = renderHook(() => usePersonalizedGreet());
+
+      await waitFor(() => {
+        expect(result.current.personalizedGreeting).toBe(
+          "Hello, David! Nice to see you, {{name}}"
+        );
+      });
     });
 
-    it("should handle both greet and username changing simultaneously", () => {
-      // Start with initial values
+    it("handles greeting with placeholder at the end", async () => {
+      mockUseDashboardSettings.mockReturnValue({
+        username: "Emma",
+      } as DashboardSettingsContextType);
+      mockGetGreeting.mockResolvedValue("Welcome {{name}}");
+
+      const { result } = renderHook(() => usePersonalizedGreet());
+
+      await waitFor(() => {
+        expect(result.current.personalizedGreeting).toBe("Welcome Emma");
+      });
+    });
+
+    it("handles greeting with placeholder at the start", async () => {
       mockUseDashboardSettings.mockReturnValue({
         username: "Frank",
-      } as keyof typeof useDashboardSettings);
-      const { result, rerender } = renderHook(
-        (props) => usePersonalizedGreet(props.greet),
-        {
-          initialProps: { greet: "Hello, {{name}}!" },
-        }
-      );
+      } as DashboardSettingsContextType);
+      mockGetGreeting.mockResolvedValue("{{name}}, welcome back");
 
-      expect(result.current.personalizedGreeting).toBe("Hello, Frank!");
+      const { result } = renderHook(() => usePersonalizedGreet());
 
-      // Change both greet and username
-      mockUseDashboardSettings.mockReturnValue({
-        username: "Grace",
-      } as keyof typeof useDashboardSettings);
-      rerender({ greet: "Welcome back, {{name}}" });
-
-      expect(result.current.personalizedGreeting).toBe("Welcome back, Grace");
+      await waitFor(() => {
+        expect(result.current.personalizedGreeting).toBe("Frank, welcome back");
+      });
     });
   });
 
-  describe("edge cases and error handling", () => {
-    it("should handle null username gracefully", () => {
+  describe("Error Handling", () => {
+    it("handles empty greeting from service", async () => {
       mockUseDashboardSettings.mockReturnValue({
-        username: null,
-      } as keyof typeof useDashboardSettings);
-      const { result } = renderHook(() =>
-        usePersonalizedGreet("Hello, {{name}}!")
-      );
+        username: "Henry",
+      } as DashboardSettingsContextType);
+      mockGetGreeting.mockResolvedValue("");
 
-      expect(result.current.personalizedGreeting).toBe("Hello!");
-    });
+      const { result } = renderHook(() => usePersonalizedGreet());
 
-    it("should handle whitespace-only username", () => {
-      const wrapper = createWrapper("   ");
-      const { result } = renderHook(
-        () => usePersonalizedGreet("Hello, {{name}}!"),
-        { wrapper }
-      );
-
-      expect(result.current.personalizedGreeting).toBe("Hello,    !");
-    });
-
-    it("should handle very long username", () => {
-      const longUsername = "A".repeat(100);
-      const wrapper = createWrapper(longUsername);
-      const { result } = renderHook(
-        () => usePersonalizedGreet("Hello, {{name}}!"),
-        { wrapper }
-      );
-
-      expect(result.current.personalizedGreeting).toBe(
-        `Hello, ${longUsername}!`
-      );
-    });
-
-    it("should handle greet with malformed placeholders", () => {
-      const wrapper = createWrapper("John");
-      const { result } = renderHook(
-        () => usePersonalizedGreet("Hello {{name} and {name}} and {{name}}!"),
-        { wrapper }
-      );
-
-      // Should only replace properly formatted {{name}}
-      expect(result.current.personalizedGreeting).toBe(
-        "Hello {{name} and {name}} and John!"
-      );
-    });
-
-    it("should handle greet with escaped braces", () => {
-      const wrapper = createWrapper("John");
-      const { result } = renderHook(
-        () => usePersonalizedGreet("Hello \\{{name\\}}!"),
-        { wrapper }
-      );
-
-      // Should not replace escaped braces
-      expect(result.current.personalizedGreeting).toBe("Hello \\{{name\\}}!");
-    });
-
-    it("should maintain initial empty state before effect runs", () => {
-      const wrapper = createWrapper("John");
-      const { result } = renderHook(
-        () => usePersonalizedGreet("Hello, {{name}}!"),
-        { wrapper }
-      );
-
-      // After effect runs, should have the personalized greeting
-      expect(result.current.personalizedGreeting).toBe("Hello, John!");
-    });
-
-    it("should handle rapid consecutive updates", () => {
-      mockUseDashboardSettings.mockReturnValue({
-        username: "User1",
-      } as keyof typeof useDashboardSettings);
-      const { result, rerender } = renderHook(
-        (props) => usePersonalizedGreet(props.greet),
-        { initialProps: { greet: "Hello, {{name}}!" } }
-      );
-
-      expect(result.current.personalizedGreeting).toBe("Hello, User1!");
-
-      // Rapid updates
-      mockUseDashboardSettings.mockReturnValue({
-        username: "User2",
-      } as keyof typeof useDashboardSettings);
-      rerender({ greet: "Hi, {{name}}!" });
-
-      mockUseDashboardSettings.mockReturnValue({
-        username: "User3",
-      } as keyof typeof useDashboardSettings);
-      rerender({ greet: "Hey, {{name}}!" });
-
-      expect(result.current.personalizedGreeting).toBe("Hey, User3!");
+      await waitFor(() => {
+        expect(result.current.personalizedGreeting).toBe("");
+      });
     });
   });
 
-  describe("performance and optimization", () => {
-    it("should not cause unnecessary re-renders when dependencies do not change", () => {
-      const wrapper = createWrapper("John");
-      const { result, rerender } = renderHook(
-        () => usePersonalizedGreet("Hello, {{name}}!"),
-        { wrapper }
-      );
+  describe("Service Call Behavior", () => {
+    it("only calls getGreeting once on mount", async () => {
+      mockUseDashboardSettings.mockReturnValue({
+        username: "Ivy",
+      } as DashboardSettingsContextType);
+      mockGetGreeting.mockResolvedValue("Hello, {{name}}");
 
-      const initialGreeting = result.current.personalizedGreeting;
-      expect(initialGreeting).toBe("Hello, John!");
+      const { rerender } = renderHook(() => usePersonalizedGreet());
 
-      // Re-render without changing dependencies
-      rerender();
-
-      // Should maintain the same reference (no unnecessary computation)
-      expect(result.current.personalizedGreeting).toBe("Hello, John!");
-    });
-
-    it("should handle empty dependencies correctly", () => {
-      const wrapper = createWrapper("");
-      const { result } = renderHook(() => usePersonalizedGreet(""), {
-        wrapper,
+      await waitFor(() => {
+        expect(mockGetGreeting).toHaveBeenCalledTimes(1);
       });
 
-      expect(result.current.personalizedGreeting).toBe("");
+      // Rerender should not call getGreeting again
+      rerender();
+
+      expect(mockGetGreeting).toHaveBeenCalledTimes(1);
+    });
+
+    it("does not call getGreeting when username changes", async () => {
+      const { rerender } = renderHook(
+        ({ username }) => {
+          mockUseDashboardSettings.mockReturnValue({
+            username,
+          } as DashboardSettingsContextType);
+          return usePersonalizedGreet();
+        },
+        { initialProps: { username: "Jack" } }
+      );
+
+      mockGetGreeting.mockResolvedValue("Hi, {{name}}");
+
+      await waitFor(() => {
+        expect(mockGetGreeting).toHaveBeenCalledTimes(1);
+      });
+
+      // Change username
+      rerender({ username: "Kate" });
+
+      // Should still only be called once
+      expect(mockGetGreeting).toHaveBeenCalledTimes(1);
     });
   });
 });

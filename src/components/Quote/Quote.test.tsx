@@ -1,15 +1,24 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { render } from "@testing-library/react";
+import { useQuote } from "../../hooks/quote";
 import Quote from ".";
 
-describe("Quote", () => {
-  const mockQuote = {
-    text: "Try and try until you succeed.",
-    author: "unknown",
-  };
+vi.mock("../../hooks/quote");
 
+const mockUseQuote = vi.mocked(useQuote);
+
+describe("Quote", () => {
   it("should display quote data correctly", () => {
-    const { getByRole } = render(<Quote quote={mockQuote} />);
+    mockUseQuote.mockReturnValue({
+      quote: {
+        text: "Try and try until you succeed.",
+        author: "unknown",
+      },
+      loading: false,
+      error: null,
+    });
+
+    const { getByRole } = render(<Quote />);
 
     const textParagraph = getByRole("quote-text");
     const authorParagraph = getByRole("quote-author");
@@ -19,7 +28,13 @@ describe("Quote", () => {
   });
 
   it("should render nothing if quote is missing", () => {
-    const { container } = render(<Quote quote={null} />);
+    mockUseQuote.mockReturnValue({
+      quote: null,
+      loading: false,
+      error: "error",
+    });
+
+    const { container } = render(<Quote />);
 
     expect(container).toBeEmptyDOMElement();
   });

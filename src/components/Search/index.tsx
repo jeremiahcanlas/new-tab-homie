@@ -16,10 +16,8 @@ const Search = (): React.JSX.Element => {
     <form
       onSubmit={handleSubmit}
       className={
-        "relative max-w-md mt-5 shadow-outline" +
-        (isSearchToggled
-          ? " animate-slide-in-right"
-          : " animate-slide-out-right")
+        "relative max-w-2xl w-[100%] mt-20 shadow-outline mx-auto" +
+        (isSearchToggled ? " animate-fade-in" : " animate-slide-out-right")
       }
       role="search-form"
       onAnimationEnd={handleAnimationEnd}
