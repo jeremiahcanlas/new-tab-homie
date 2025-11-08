@@ -6,15 +6,12 @@
   "chrome_url_overrides": {
     "newtab": "index.html"
   },
-  "permissions": [
-    "search"
-  ],
+  "permissions": ["search"],
   "host_permissions": [
     "*://nominatim.openstreetmap.org/*",
-    "*://api.quotable.io/*",
     "*://api.open-meteo.com/*"
   ],
   "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'; font-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;"
+    "extension_pages": "script-src 'self'; object-src 'self'; font-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; style-src 'self' https://fonts.googleapis.com;"
   }
 }
