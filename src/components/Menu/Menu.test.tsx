@@ -16,6 +16,7 @@ describe("Menu Component", () => {
   const mockSetClockFormat = vi.fn();
   const mockSetDarkToggled = vi.fn();
   const mockToggleSearch = vi.fn();
+  const mockToggleQuote = vi.fn();
 
   const defaultMockReturn = {
     unit: "celsius" as "celsius" | "fahrenheit",
@@ -28,6 +29,8 @@ describe("Menu Component", () => {
     setDarkToggled: mockSetDarkToggled,
     isSearchToggled: false,
     toggleSearch: mockToggleSearch,
+    isQuoteToggled: false,
+    toggleQuote: mockToggleQuote,
   };
 
   beforeEach(() => {
