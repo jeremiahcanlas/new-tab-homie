@@ -12,6 +12,8 @@ const DashboardSettingsContext = createContext<DashboardSettingsContextType>({
   setDarkToggled: () => {},
   isSearchToggled: false,
   toggleSearch: () => {},
+  isQuoteToggled: false,
+  toggleQuote: () => {},
 });
 
 export const DashboardSettingsProvider: React.FC<{
@@ -46,6 +48,12 @@ export const DashboardSettingsProvider: React.FC<{
     return JSON.parse(stored);
   });
 
+  // quote toggle
+  const [isQuoteToggled, toggleQuote] = useState<boolean>(() => {
+    const stored = localStorage.getItem("enableQuote") || "false";
+    return JSON.parse(stored);
+  });
+
   useEffect(() => {
     const shouldUseDark = darkToggled;
 
@@ -59,7 +67,15 @@ export const DashboardSettingsProvider: React.FC<{
     localStorage.setItem("clockFormat", clockFormat);
     localStorage.setItem("darkToggled", JSON.stringify(darkToggled));
     localStorage.setItem("enableSearch", JSON.stringify(isSearchToggled));
-  }, [unit, username, clockFormat, darkToggled, isSearchToggled]);
+    localStorage.setItem("enableQuote", JSON.stringify(isQuoteToggled));
+  }, [
+    unit,
+    username,
+    clockFormat,
+    darkToggled,
+    isSearchToggled,
+    isQuoteToggled,
+  ]);
 
   // Sync changes from other tabs
   useEffect(() => {
@@ -97,6 +113,14 @@ export const DashboardSettingsProvider: React.FC<{
       ) {
         toggleSearch(JSON.parse(e.newValue));
       }
+
+      if (
+        e.key === "enableQuote" &&
+        e.newValue &&
+        (e.newValue === "true" || e.newValue === "false")
+      ) {
+        toggleSearch(JSON.parse(e.newValue));
+      }
     };
     window.addEventListener("storage", syncSettings);
     return () => window.removeEventListener("storage", syncSettings);
@@ -115,6 +139,8 @@ export const DashboardSettingsProvider: React.FC<{
         setDarkToggled,
         isSearchToggled,
         toggleSearch,
+        isQuoteToggled,
+        toggleQuote,
       }}
     >
       {children}

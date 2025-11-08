@@ -29,4 +29,6 @@ export interface DashboardSettingsContextType {
   setDarkToggled: (darkToggled: boolean) => void;
   isSearchToggled: boolean;
   toggleSearch: (isSearchToggled: boolean) => void;
+  isQuoteToggled: boolean;
+  toggleQuote: (isQuoteToggled: boolean) => void;
 }
