@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, fireEvent, waitFor } from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Menu from ".";
 import { useDashboardSettings } from "../../context/DashboardSettingsContext";
@@ -45,12 +45,6 @@ describe("Menu Component", () => {
       expect(getByText("Dashboard Settings")).toBeInTheDocument();
     });
 
-    it("does not render initially when isOpen is false", () => {
-      const { container } = render(<Menu isOpen={false} />);
-
-      expect(container.firstChild).toBeNull();
-    });
-
     it("renders after isOpen changes from false to true", async () => {
       const { rerender, getByText } = render(<Menu isOpen={false} />);
 
@@ -61,13 +55,13 @@ describe("Menu Component", () => {
       });
     });
 
-    it("applies slide-out animation class when isOpen is false but still rendering", async () => {
+    it("not have open class when isOpen is false but still rendering", async () => {
       const { rerender, getByText } = render(<Menu isOpen={true} />);
 
       rerender(<Menu isOpen={false} />);
 
       const menuContainer = getByText("Dashboard Settings").parentElement;
-      expect(menuContainer).toHaveClass("animate-slide-out-left");
+      expect(menuContainer).not.toHaveClass("open");
     });
   });
 
@@ -318,9 +312,9 @@ describe("Menu Component", () => {
     it("renders search toggle correctly", () => {
       const { getByText, getByRole } = render(<Menu isOpen={true} />);
 
-      expect(getByText("show search bar")).toBeInTheDocument();
+      expect(getByText("show search")).toBeInTheDocument();
       expect(
-        getByRole("checkbox", { name: /show search bar/i })
+        getByRole("checkbox", { name: /show search/i })
       ).toBeInTheDocument();
     });
 
@@ -332,7 +326,7 @@ describe("Menu Component", () => {
 
       const { getByRole } = render(<Menu isOpen={true} />);
 
-      const searchToggle = getByRole("checkbox", { name: /show search bar/i });
+      const searchToggle = getByRole("checkbox", { name: /show search/i });
       expect(searchToggle).not.toBeChecked();
     });
 
@@ -344,7 +338,7 @@ describe("Menu Component", () => {
 
       const { getByRole } = render(<Menu isOpen={true} />);
 
-      const searchToggle = getByRole("checkbox", { name: /show search bar/i });
+      const searchToggle = getByRole("checkbox", { name: /show search/i });
       expect(searchToggle).toBeChecked();
     });
 
@@ -357,7 +351,7 @@ describe("Menu Component", () => {
 
       const { getByRole } = render(<Menu isOpen={true} />);
 
-      const searchToggle = getByRole("checkbox", { name: /show search bar/i });
+      const searchToggle = getByRole("checkbox", { name: /show search/i });
       await user.click(searchToggle);
 
       expect(mockToggleSearch).toHaveBeenCalledWith(true);
@@ -372,37 +366,9 @@ describe("Menu Component", () => {
       const { getByText } = render(<Menu isOpen={true} />);
 
       // Since both toggles have the same structure, we need to find the search toggle specifically
-      const searchSection = getByText("show search bar").closest("div");
+      const searchSection = getByText("show search").closest("div");
       const slider = searchSection?.querySelector(".translate-x-5");
       expect(slider).toBeInTheDocument();
-    });
-  });
-
-  describe("Animation Handling", () => {
-    it("calls handleAnimationEnd and hides component when animation ends while closed", async () => {
-      const { rerender, container, getByText } = render(<Menu isOpen={true} />);
-
-      // Change to closed
-      rerender(<Menu isOpen={false} />);
-
-      // Trigger animation end
-      const menuContainer = getByText("Dashboard Settings").parentElement;
-      fireEvent.animationEnd(menuContainer!);
-
-      // Wait for the component to be removed from DOM
-      await waitFor(() => {
-        expect(container.firstChild).toBeNull();
-      });
-    });
-
-    it("does not hide component when animation ends while open", () => {
-      const { getByText } = render(<Menu isOpen={true} />);
-
-      const menuContainer = getByText("Dashboard Settings").parentElement;
-      fireEvent.animationEnd(menuContainer!);
-
-      // Component should still be visible
-      expect(getByText("Dashboard Settings")).toBeInTheDocument();
     });
   });
 

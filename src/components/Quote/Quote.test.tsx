@@ -16,6 +16,9 @@ describe("Quote", () => {
       },
       loading: false,
       error: null,
+      isQuoteToggled: true,
+      shouldRender: true,
+      handleAnimationEnd: () => {},
     });
 
     const { getByRole } = render(<Quote />);
@@ -32,6 +35,9 @@ describe("Quote", () => {
       quote: null,
       loading: false,
       error: "error",
+      isQuoteToggled: true,
+      shouldRender: true,
+      handleAnimationEnd: () => {},
     });
 
     const { container } = render(<Quote />);

@@ -95,9 +95,8 @@ describe("Search", () => {
 
       const form = getByRole("search-form");
       expect(form).toHaveClass(
-        "relative",
+        "w-full",
         "max-w-2xl",
-        "mt-20",
         "shadow-outline",
         "mx-auto"
       );
