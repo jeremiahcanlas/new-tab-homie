@@ -51,7 +51,7 @@ describe("weatherService", () => {
 
     const result = await weatherService.getCurrentWeather(
       mockGeolocation,
-      "celsius"
+      true
     );
 
     expect(result).toEqual({
@@ -79,7 +79,7 @@ describe("weatherService", () => {
       json: () => Promise.resolve(mockApiResponse),
     });
 
-    const result = await weatherService.getCurrentWeather(null, "fahrenheit");
+    const result = await weatherService.getCurrentWeather(null, false);
 
     expect(result).toEqual({
       temperature: 16,
@@ -106,7 +106,7 @@ describe("weatherService", () => {
       json: () => Promise.resolve(mockApiResponse),
     });
 
-    const result = await weatherService.getCurrentWeather(null, "celsius");
+    const result = await weatherService.getCurrentWeather(null, true);
 
     expect(result).toEqual({
       temperature: 25,
@@ -133,7 +133,7 @@ describe("weatherService", () => {
 
     const result = await weatherService.getCurrentWeather(
       mockGeolocation,
-      "celsius"
+      true
     );
 
     expect(result).toEqual({
@@ -161,7 +161,7 @@ describe("weatherService", () => {
 
     const result = await weatherService.getCurrentWeather(
       mockGeolocation,
-      "celsius"
+      true
     );
 
     expect(result).toEqual({
@@ -189,7 +189,7 @@ describe("weatherService", () => {
 
     const result = await weatherService.getCurrentWeather(
       mockGeolocation,
-      "celsius"
+      true
     );
 
     expect(result).toEqual({
@@ -209,7 +209,7 @@ describe("weatherService", () => {
 
     const result = await weatherService.getCurrentWeather(
       mockGeolocation,
-      "celsius"
+      true
     );
 
     expect(result).toBeNull();
@@ -224,7 +224,7 @@ describe("weatherService", () => {
 
     const result = await weatherService.getCurrentWeather(
       mockGeolocation,
-      "celsius"
+      true
     );
 
     expect(result).toBeNull();
@@ -241,7 +241,7 @@ describe("weatherService", () => {
 
     const result = await weatherService.getCurrentWeather(
       mockGeolocation,
-      "celsius"
+      true
     );
 
     expect(result).toBeNull();
@@ -266,7 +266,7 @@ describe("weatherService", () => {
 
     const result = await weatherService.getCurrentWeather(
       mockGeolocation,
-      "fahrenheit"
+      false
     );
 
     expect(result).toEqual({
@@ -298,7 +298,7 @@ describe("weatherService", () => {
 
     const result = await weatherService.getCurrentWeather(
       mockGeolocation,
-      "celsius"
+      true
     );
 
     expect(result).toEqual({

@@ -25,7 +25,7 @@ describe("useWeather", () => {
   };
 
   const mockLocalStorage = {
-    unit: "celsius",
+    isCelsius: true,
   };
 
   beforeEach(() => {
@@ -62,7 +62,7 @@ describe("useWeather", () => {
     expect(mockCoordinatesService.getCoords).toHaveBeenCalledTimes(1);
     expect(mockWeatherService.getCurrentWeather).toHaveBeenCalledWith(
       mockCoords,
-      "celsius"
+      true
     );
   });
 
