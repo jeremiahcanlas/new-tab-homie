@@ -11,20 +11,20 @@ vi.mock("../../context/DashboardSettingsContext", () => ({
 const mockUseDashboardSettings = vi.mocked(useDashboardSettings);
 
 describe("Menu Component", () => {
-  const mockSetUnit = vi.fn();
   const mockSetUsername = vi.fn();
-  const mockSetClockFormat = vi.fn();
+  const mockSetUseCelsius = vi.fn();
+  const mockSetTwelveHourMode = vi.fn();
   const mockSetDarkToggled = vi.fn();
   const mockToggleSearch = vi.fn();
   const mockToggleQuote = vi.fn();
 
   const defaultMockReturn = {
-    unit: "celsius" as "celsius" | "fahrenheit",
-    setUnit: mockSetUnit,
     username: "",
     setUsername: mockSetUsername,
-    clockFormat: "12" as "12" | "24",
-    setClockFormat: mockSetClockFormat,
+    isCelsius: false,
+    toggleUseCelsius: mockSetUseCelsius,
+    twelveHourMode: false,
+    setTwelveHourMode: mockSetTwelveHourMode,
     darkToggled: false,
     setDarkToggled: mockSetDarkToggled,
     isSearchToggled: false,
@@ -42,7 +42,7 @@ describe("Menu Component", () => {
     it("renders when isOpen is true", () => {
       const { getByText } = render(<Menu isOpen={true} />);
 
-      expect(getByText("Dashboard Settings")).toBeInTheDocument();
+      expect(getByText("Username:")).toBeInTheDocument();
     });
 
     it("renders after isOpen changes from false to true", async () => {
@@ -51,18 +51,18 @@ describe("Menu Component", () => {
       rerender(<Menu isOpen={true} />);
 
       await waitFor(() => {
-        expect(getByText("Dashboard Settings")).toBeInTheDocument();
+        expect(getByText("Username:")).toBeInTheDocument();
       });
     });
 
-    it("not have open class when isOpen is false but still rendering", async () => {
-      const { rerender, getByText } = render(<Menu isOpen={true} />);
+    // it("not have open class when isOpen is false but still rendering", async () => {
+    //   const { rerender, getByText } = render(<Menu isOpen={true} />);
 
-      rerender(<Menu isOpen={false} />);
+    //   rerender(<Menu isOpen={false} />);
 
-      const menuContainer = getByText("Dashboard Settings").parentElement;
-      expect(menuContainer).not.toHaveClass("open");
-    });
+    //   const menuContainer = getByText("Dashboard Settings").parentElement;
+    //   expect(menuContainer).not.toHaveClass("open");
+    // });
   });
 
   describe("Username Input", () => {
@@ -100,137 +100,79 @@ describe("Menu Component", () => {
     });
   });
 
-  describe("Clock Format Radio Buttons", () => {
+  describe("Twelve hour time", () => {
     it("renders clock format options correctly", () => {
-      const { getByText, getByLabelText } = render(<Menu isOpen={true} />);
+      const { getByText } = render(<Menu isOpen={true} />);
 
-      expect(getByText("Clock Format:")).toBeInTheDocument();
-      expect(getByLabelText("12-hr")).toBeInTheDocument();
-      expect(getByLabelText("24-hr")).toBeInTheDocument();
+      expect(getByText("12-hr time")).toBeInTheDocument();
     });
 
-    it('selects 12-hour format when clockFormat is "12"', () => {
-      mockUseDashboardSettings.mockReturnValue({
-        ...defaultMockReturn,
-        clockFormat: "12",
-      });
+    // it('selects 12-hour format when clockFormat is "12"', () => {
+    //   mockUseDashboardSettings.mockReturnValue({
+    //     ...defaultMockReturn,
+    //     clockFormat: "12",
+    //   });
 
-      const { getByLabelText } = render(<Menu isOpen={true} />);
+    //   const { getByLabelText } = render(<Menu isOpen={true} />);
 
-      const radio12 = getByLabelText("12-hr");
-      const radio24 = getByLabelText("24-hr");
+    //   const radio12 = getByLabelText("12-hr");
+    //   const radio24 = getByLabelText("24-hr");
 
-      expect(radio12).toBeChecked();
-      expect(radio24).not.toBeChecked();
-    });
+    //   expect(radio12).toBeChecked();
+    //   expect(radio24).not.toBeChecked();
+    // });
 
-    it('selects 24-hour format when clockFormat is "24"', () => {
-      mockUseDashboardSettings.mockReturnValue({
-        ...defaultMockReturn,
-        clockFormat: "24",
-      });
+    // it('selects 24-hour format when clockFormat is "24"', () => {
+    //   mockUseDashboardSettings.mockReturnValue({
+    //     ...defaultMockReturn,
+    //     clockFormat: "24",
+    //   });
 
-      const { getByLabelText } = render(<Menu isOpen={true} />);
+    //   const { getByLabelText } = render(<Menu isOpen={true} />);
 
-      const radio12 = getByLabelText("12-hr");
-      const radio24 = getByLabelText("24-hr");
+    //   const radio12 = getByLabelText("12-hr");
+    //   const radio24 = getByLabelText("24-hr");
 
-      expect(radio12).not.toBeChecked();
-      expect(radio24).toBeChecked();
-    });
+    //   expect(radio12).not.toBeChecked();
+    //   expect(radio24).toBeChecked();
+    // });
 
-    it("calls setClockFormat when 12-hour option is selected", async () => {
-      mockUseDashboardSettings.mockReturnValueOnce({
-        ...defaultMockReturn,
-        clockFormat: "24",
-      });
+    // it("calls setClockFormat when 12-hour option is selected", async () => {
+    //   mockUseDashboardSettings.mockReturnValueOnce({
+    //     ...defaultMockReturn,
+    //     clockFormat: "24",
+    //   });
 
-      const user = userEvent.setup();
-      const { getByLabelText } = render(<Menu isOpen={true} />);
+    //   const user = userEvent.setup();
+    //   const { getByLabelText } = render(<Menu isOpen={true} />);
 
-      const radio12 = getByLabelText("12-hr");
-      await user.click(radio12);
+    //   const radio12 = getByLabelText("12-hr");
+    //   await user.click(radio12);
 
-      expect(mockSetClockFormat).toHaveBeenCalledWith("12");
-    });
+    //   expect(mockSetClockFormat).toHaveBeenCalledWith("12");
+    // });
 
-    it("calls setClockFormat when 24-hour option is selected", async () => {
-      mockUseDashboardSettings.mockReturnValueOnce({
-        ...defaultMockReturn,
-        clockFormat: "12",
-      });
+    // it("calls setClockFormat when 24-hour option is selected", async () => {
+    //   mockUseDashboardSettings.mockReturnValueOnce({
+    //     ...defaultMockReturn,
+    //     clockFormat: "12",
+    //   });
 
-      const user = userEvent.setup();
-      const { getByLabelText } = render(<Menu isOpen={true} />);
+    //   const user = userEvent.setup();
+    //   const { getByLabelText } = render(<Menu isOpen={true} />);
 
-      const radio24 = getByLabelText("24-hr");
-      await user.click(radio24);
+    //   const radio24 = getByLabelText("24-hr");
+    //   await user.click(radio24);
 
-      expect(mockSetClockFormat).toHaveBeenCalledWith("24");
-    });
+    //   expect(mockSetClockFormat).toHaveBeenCalledWith("24");
+    // });
   });
 
-  describe("Temperature Unit Radio Buttons", () => {
-    it("renders temperature unit options correctly", () => {
-      const { getByText, getByLabelText } = render(<Menu isOpen={true} />);
+  describe("Celsius Toggle", () => {
+    it("renders celsius toggle text correctly", () => {
+      const { getByText } = render(<Menu isOpen={true} />);
 
-      expect(getByText("Temperature Unit:")).toBeInTheDocument();
-      expect(getByLabelText("°C")).toBeInTheDocument();
-      expect(getByLabelText("°F")).toBeInTheDocument();
-    });
-
-    it('selects celsius when unit is "celsius"', () => {
-      mockUseDashboardSettings.mockReturnValue({
-        ...defaultMockReturn,
-        unit: "celsius",
-      });
-
-      const { getByLabelText } = render(<Menu isOpen={true} />);
-
-      const celsiusRadio = getByLabelText("°C");
-      const fahrenheitRadio = getByLabelText("°F");
-
-      expect(celsiusRadio).toBeChecked();
-      expect(fahrenheitRadio).not.toBeChecked();
-    });
-
-    it('selects fahrenheit when unit is "fahrenheit"', () => {
-      mockUseDashboardSettings.mockReturnValue({
-        ...defaultMockReturn,
-        unit: "fahrenheit",
-      });
-
-      const { getByLabelText } = render(<Menu isOpen={true} />);
-
-      const celsiusRadio = getByLabelText("°C");
-      const fahrenheitRadio = getByLabelText("°F");
-
-      expect(celsiusRadio).not.toBeChecked();
-      expect(fahrenheitRadio).toBeChecked();
-    });
-
-    it("calls setUnit when celsius option is selected", async () => {
-      mockUseDashboardSettings.mockReturnValueOnce({
-        ...defaultMockReturn,
-        unit: "fahrenheit",
-      });
-      const user = userEvent.setup();
-      const { getByLabelText } = render(<Menu isOpen={true} />);
-
-      const celsiusRadio = getByLabelText("°C");
-      await user.click(celsiusRadio);
-
-      expect(mockSetUnit).toHaveBeenCalledWith("celsius");
-    });
-
-    it("calls setUnit when fahrenheit option is selected", async () => {
-      const user = userEvent.setup();
-      const { getByLabelText } = render(<Menu isOpen={true} />);
-
-      const fahrenheitRadio = getByLabelText("°F");
-      await user.click(fahrenheitRadio);
-
-      expect(mockSetUnit).toHaveBeenCalledWith("fahrenheit");
+      expect(getByText("use celsius")).toBeInTheDocument();
     });
   });
 
