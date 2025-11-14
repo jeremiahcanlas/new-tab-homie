@@ -10,12 +10,12 @@ vi.mock("../../context/DashboardSettingsContext");
 const mockUseDashboardSettings = vi.mocked(useDashboardSettings);
 
 // Mock wrapper component for testing
-const createWrapper = (clockFormat: "12" | "24") => {
+const createWrapper = (twelveHourMode: boolean) => {
   return ({ children }: { children: ReactNode }) => {
     // Mock the context value
 
     mockUseDashboardSettings.mockReturnValue({
-      clockFormat,
+      twelveHourMode,
     } as keyof typeof useDashboardSettings);
     return <>{children}</>;
   };
@@ -35,7 +35,7 @@ describe("useClock", () => {
 
   describe("12-hour format", () => {
     it("should return correct date and time in 12-hour format", () => {
-      const wrapper = createWrapper("12");
+      const wrapper = createWrapper(true);
       const { result } = renderHook(() => useClock(), { wrapper });
 
       expect(result.current.dateTime.currentDate).toBe("Monday, January 15");
@@ -44,7 +44,7 @@ describe("useClock", () => {
 
     it("should format AM times correctly", () => {
       vi.setSystemTime(new Date("2024-01-15 09:15:30"));
-      const wrapper = createWrapper("12");
+      const wrapper = createWrapper(true);
       const { result } = renderHook(() => useClock(), { wrapper });
 
       expect(result.current.dateTime.currentTime).toBe("09:15");
@@ -52,7 +52,7 @@ describe("useClock", () => {
 
     it("should format PM times correctly", () => {
       vi.setSystemTime(new Date("2024-01-15 15:45:30"));
-      const wrapper = createWrapper("12");
+      const wrapper = createWrapper(true);
       const { result } = renderHook(() => useClock(), { wrapper });
 
       expect(result.current.dateTime.currentTime).toBe("03:45");
@@ -60,7 +60,7 @@ describe("useClock", () => {
 
     it("should format midnight correctly", () => {
       vi.setSystemTime(new Date("2024-01-15 00:00:00"));
-      const wrapper = createWrapper("12");
+      const wrapper = createWrapper(true);
       const { result } = renderHook(() => useClock(), { wrapper });
 
       expect(result.current.dateTime.currentTime).toBe("12:00");
@@ -68,7 +68,7 @@ describe("useClock", () => {
 
     it("should format noon correctly", () => {
       vi.setSystemTime(new Date("2024-01-15 12:00:00"));
-      const wrapper = createWrapper("12");
+      const wrapper = createWrapper(true);
       const { result } = renderHook(() => useClock(), { wrapper });
 
       expect(result.current.dateTime.currentTime).toBe("12:00");
@@ -77,7 +77,7 @@ describe("useClock", () => {
 
   describe("24-hour format", () => {
     it("should return correct date and time in 24-hour format", () => {
-      const wrapper = createWrapper("24");
+      const wrapper = createWrapper(false);
       const { result } = renderHook(() => useClock(), { wrapper });
 
       expect(result.current.dateTime.currentDate).toBe("Monday, January 15");
@@ -86,7 +86,7 @@ describe("useClock", () => {
 
     it("should format morning times correctly", () => {
       vi.setSystemTime(new Date("2024-01-15 09:15:30"));
-      const wrapper = createWrapper("24");
+      const wrapper = createWrapper(false);
       const { result } = renderHook(() => useClock(), { wrapper });
 
       expect(result.current.dateTime.currentTime).toBe("09:15");
@@ -94,7 +94,7 @@ describe("useClock", () => {
 
     it("should format evening times correctly", () => {
       vi.setSystemTime(new Date("2024-01-15 21:45:30"));
-      const wrapper = createWrapper("24");
+      const wrapper = createWrapper(false);
       const { result } = renderHook(() => useClock(), { wrapper });
 
       expect(result.current.dateTime.currentTime).toBe("21:45");
@@ -102,7 +102,7 @@ describe("useClock", () => {
 
     it("should format midnight correctly", () => {
       vi.setSystemTime(new Date("2024-01-15 00:00:00"));
-      const wrapper = createWrapper("24");
+      const wrapper = createWrapper(false);
       const { result } = renderHook(() => useClock(), { wrapper });
 
       // Note: Some locales/environments may return '24:00' instead of '00:00' for midnight
@@ -113,7 +113,7 @@ describe("useClock", () => {
 
   describe("interval functionality", () => {
     it("should update time every second", () => {
-      const wrapper = createWrapper("24");
+      const wrapper = createWrapper(false);
       const { result } = renderHook(() => useClock(), { wrapper });
 
       const initialTime = result.current.dateTime.currentTime;
@@ -136,7 +136,7 @@ describe("useClock", () => {
 
     it("should clear interval on unmount", () => {
       const clearIntervalSpy = vi.spyOn(global, "clearInterval");
-      const wrapper = createWrapper("24");
+      const wrapper = createWrapper(false);
       const { unmount } = renderHook(() => useClock(), { wrapper });
 
       unmount();
@@ -145,18 +145,22 @@ describe("useClock", () => {
       clearIntervalSpy.mockRestore();
     });
 
-    it("should restart interval when clockFormat changes", () => {
+    it("should restart interval when twelveHourMode changes", () => {
       const setIntervalSpy = vi.spyOn(global, "setInterval");
       const clearIntervalSpy = vi.spyOn(global, "clearInterval");
 
       // Start with 12-hour format
-      mockUseDashboardSettings.mockReturnValue({ clockFormat: "12" } as keyof typeof useDashboardSettings);
+      mockUseDashboardSettings.mockReturnValue({
+        twelveHourMode: true,
+      } as keyof typeof useDashboardSettings);
       const { rerender } = renderHook(() => useClock());
 
       const initialCallCount = setIntervalSpy.mock.calls.length;
 
       // Change to 24-hour format
-      mockUseDashboardSettings.mockReturnValue({ clockFormat: "24" } as keyof typeof useDashboardSettings);
+      mockUseDashboardSettings.mockReturnValue({
+        twelveHourMode: false,
+      } as keyof typeof useDashboardSettings);
       rerender();
 
       // Should have cleared the old interval and created a new one
@@ -174,7 +178,7 @@ describe("useClock", () => {
     it("should format different weekdays correctly", () => {
       // Test Tuesday
       vi.setSystemTime(new Date("2024-01-16 14:30:45"));
-      const wrapper = createWrapper("24");
+      const wrapper = createWrapper(false);
       const { result } = renderHook(() => useClock(), { wrapper });
 
       expect(result.current.dateTime.currentDate).toBe("Tuesday, January 16");
@@ -183,7 +187,7 @@ describe("useClock", () => {
     it("should format different months correctly", () => {
       // Test December
       vi.setSystemTime(new Date("2024-12-25 14:30:45"));
-      const wrapper = createWrapper("24");
+      const wrapper = createWrapper(false);
       const { result } = renderHook(() => useClock(), { wrapper });
 
       expect(result.current.dateTime.currentDate).toBe(
@@ -194,7 +198,7 @@ describe("useClock", () => {
     it("should format single digit days correctly", () => {
       // Test single digit day
       vi.setSystemTime(new Date("2024-01-05 14:30:45"));
-      const wrapper = createWrapper("24");
+      const wrapper = createWrapper(false);
       const { result } = renderHook(() => useClock(), { wrapper });
 
       expect(result.current.dateTime.currentDate).toBe("Friday, January 5");
@@ -205,7 +209,7 @@ describe("useClock", () => {
     it("should handle seconds rollover correctly", () => {
       // Set time to 59 seconds
       vi.setSystemTime(new Date("2024-01-15 14:30:59"));
-      const wrapper = createWrapper("24");
+      const wrapper = createWrapper(false);
       const { result } = renderHook(() => useClock(), { wrapper });
 
       expect(result.current.dateTime.currentTime).toBe("14:30");
@@ -221,7 +225,7 @@ describe("useClock", () => {
     it("should handle hour rollover correctly", () => {
       // Set time to 59 minutes
       vi.setSystemTime(new Date("2024-01-15 14:59:30"));
-      const wrapper = createWrapper("24");
+      const wrapper = createWrapper(false);
       const { result } = renderHook(() => useClock(), { wrapper });
 
       expect(result.current.dateTime.currentTime).toBe("14:59");
@@ -237,7 +241,7 @@ describe("useClock", () => {
     it("should handle day rollover correctly", () => {
       // Set time to 23:59
       vi.setSystemTime(new Date("2024-01-15 23:59:30"));
-      const wrapper = createWrapper("24");
+      const wrapper = createWrapper(false);
       const { result } = renderHook(() => useClock(), { wrapper });
 
       expect(result.current.dateTime.currentDate).toBe("Monday, January 15");

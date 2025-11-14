@@ -88,7 +88,7 @@ describe("coordinatesService", () => {
     // Mock geolocation error
     const mockGetCurrentPosition = navigator.geolocation
       .getCurrentPosition as ReturnType<typeof vi.fn>;
-    mockGetCurrentPosition.mockImplementation((_sucess, error) => {
+    mockGetCurrentPosition.mockImplementation((_success, error) => {
       error(mockError);
     });
 

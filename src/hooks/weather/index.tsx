@@ -9,7 +9,7 @@ export const useWeather = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const { unit } = useDashboardSettings();
+  const { isCelsius } = useDashboardSettings();
 
   const hasFetched = useRef(false);
 
@@ -25,7 +25,10 @@ export const useWeather = () => {
         throw new Error("Could not get coordinates");
       }
 
-      const weatherData = await weatherService.getCurrentWeather(coords, unit);
+      const weatherData = await weatherService.getCurrentWeather(
+        coords,
+        isCelsius
+      );
 
       setWeather(weatherData);
     } catch (err) {
@@ -33,7 +36,7 @@ export const useWeather = () => {
     } finally {
       setLoading(false);
     }
-  }, [unit]);
+  }, [isCelsius]);
 
   useEffect(() => {
     if (!hasFetched.current) {

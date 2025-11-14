@@ -1,7 +1,7 @@
 import { useQuote } from "../../hooks/quote";
 
 const Quote = (): React.JSX.Element => {
-  const { quote, loading } = useQuote();
+  const { quote, loading, isQuoteToggled, handleAnimationEnd } = useQuote();
 
   if (!quote || loading) return <></>;
 
@@ -10,7 +10,11 @@ const Quote = (): React.JSX.Element => {
   return (
     <div
       key={author}
-      className=" md:mt-auto border border-gray-300 rounded-sm p-5 w-full md:w-max md:max-w-[35%] shadow-outline relative animate-fade-in"
+      className={
+        "quote-container shadow-outline" +
+        (isQuoteToggled ? " animate-fade-in" : " animate-slide-out-right")
+      }
+      onAnimationEnd={handleAnimationEnd}
     >
       <p role="quote-text" className="font-semibold text-md mr-3">
         {text}

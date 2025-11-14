@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDashboardSettings } from "../../context/DashboardSettingsContext";
 
-const getDateTime = (clockFormat: "12" | "24") => {
+const getDateTime = (twelveHourMode: boolean) => {
   const now = new Date();
 
   const currentDate = now.toLocaleString("en-US", {
@@ -13,7 +13,7 @@ const getDateTime = (clockFormat: "12" | "24") => {
   const currentTime = now
     .toLocaleString("en-US", {
       hour: "2-digit",
-      hour12: clockFormat === "12",
+      hour12: twelveHourMode,
       minute: "2-digit",
     })
     .replace(/ AM| PM/, "");
@@ -25,17 +25,17 @@ const getDateTime = (clockFormat: "12" | "24") => {
 };
 
 export const useClock = () => {
-  const { clockFormat } = useDashboardSettings();
+  const { twelveHourMode } = useDashboardSettings();
 
-  const [dateTime, setDateTime] = useState(getDateTime(clockFormat));
+  const [dateTime, setDateTime] = useState(getDateTime(twelveHourMode));
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setDateTime(getDateTime(clockFormat));
+      setDateTime(getDateTime(twelveHourMode));
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [clockFormat]);
+  }, [twelveHourMode]);
 
   return { dateTime };
 };

@@ -56,7 +56,7 @@ const Dashboard = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="h-screen flex flex-row overflow-hidden">
+    <div className="dashboard-container">
       <div
         className="main-container"
         onClick={() => isOpen && setIsOpen(false)}

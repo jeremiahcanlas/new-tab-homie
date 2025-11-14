@@ -54,18 +54,22 @@ body {
   @keyframes slideInLeft {
     from {
       transform: translateX(100%);
+      opacity: 0;
     }
     to {
       transform: translateX(0);
+      opacity: 1;
     }
   }
 
   @keyframes slideOutLeft {
     from {
       transform: translateX(0);
+      opacity: 1;
     }
     to {
       transform: translateX(100%);
+      opacity: 0;
     }
   }
 
@@ -93,27 +97,19 @@ body {
 }
 
 @layer utilities {
-  .row-flex {
-    @apply flex flex-row;
-  }
-
-  .col-flex {
-    @apply flex flex-col;
-  }
-
-  .wrap-flex {
-    @apply flex flex-wrap;
-  }
-
   .animate-once {
-    animation-iteration-count: 0.25 !important;
-    animation-fill-mode: forwards !important; /* keeps final state */
+    animation-iteration-count: 0.15 !important;
+    animation-fill-mode: backwards !important;
+  }
+
+  .transition-smooth {
+    transition: all 250ms ease-in-out;
   }
 
   .animate-slide-in-left,
   .animate-slide-out-left {
     will-change: transform;
-    overflow: hidden; /* only on the animated element, not globally */
+    overflow: hidden;
   }
 
   .shadow-outline {
@@ -122,12 +118,33 @@ body {
 }
 
 @layer components {
+  .dashboard-container {
+    @apply h-screen flex flex-row overflow-hidden;
+  }
+
   .main-container {
     @apply p-2 h-screen w-full flex flex-col gap-3;
   }
 
   .placeholder {
     @apply bg-gray-300 animate-pulse rounded;
+  }
+
+  .menu-sidebar {
+    @apply w-0;
+  }
+
+  .menu-sidebar.open {
+    @apply w-sm bg-text-dark dark:bg-text;
+  }
+
+  .weather-container {
+    @apply flex flex-row place-content-between;
+  }
+
+  .quote-container {
+    @apply border border-gray-300 rounded-sm p-5 w-full relative;
+    @apply md:mt-auto md:w-[35%] md:max-w-[30vw];
   }
 }
 
@@ -136,13 +153,9 @@ body {
     @apply text-text dark:text-text-dark bg-background dark:bg-background-dark;
   }
 
-  /* h2 {
+  h2 {
     @apply font-medium text-[min(5vw,15px)];
-  } */
-
-  /* p {
-    @apply font-medium text-[min(5vw,14px)];
-  } */
+  }
 
   svg path {
     @apply stroke-text dark:stroke-text-dark;

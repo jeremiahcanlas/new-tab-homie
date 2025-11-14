@@ -19,14 +19,16 @@ export type QuoteData = {
 };
 
 export interface DashboardSettingsContextType {
-  unit: "celsius" | "fahrenheit";
-  setUnit: (unit: "celsius" | "fahrenheit") => void;
   username: string | undefined;
   setUsername: (username: string) => void;
-  clockFormat: "12" | "24";
-  setClockFormat: (clockFormat: "12" | "24") => void;
+  isCelsius: boolean;
+  toggleUseCelsius: (isCelsius: boolean) => void;
+  twelveHourMode: boolean;
+  setTwelveHourMode: (twelveHourMode: boolean) => void;
   darkToggled: boolean;
   setDarkToggled: (darkToggled: boolean) => void;
   isSearchToggled: boolean;
   toggleSearch: (isSearchToggled: boolean) => void;
+  isQuoteToggled: boolean;
+  toggleQuote: (isQuoteToggled: boolean) => void;
 }

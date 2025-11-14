@@ -1,7 +1,7 @@
 {
   "name": "homie-app",
   "private": true,
-  "version": "0.10.0",
+  "version": "0.11.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,7 +10,9 @@
     "preview": "vite preview",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "test:coverage": "vitest --coverage"
+    "test:coverage": "vitest --coverage",
+    "sync-version": "node sync-version.js",
+    "version": "npm run sync-version"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.11",
