@@ -2,12 +2,12 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import type { DashboardSettingsContextType } from "../types";
 
 const DashboardSettingsContext = createContext<DashboardSettingsContextType>({
-  unit: "celsius",
-  setUnit: () => {},
   username: "",
   setUsername: () => {},
-  clockFormat: "12",
-  setClockFormat: () => {},
+  isCelsius: false,
+  toggleUseCelsius: () => {},
+  twelveHourMode: false,
+  setTwelveHourMode: () => {},
   darkToggled: false,
   setDarkToggled: () => {},
   isSearchToggled: false,
@@ -19,24 +19,22 @@ const DashboardSettingsContext = createContext<DashboardSettingsContextType>({
 export const DashboardSettingsProvider: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
-  // weather unit
-  const [unit, setUnit] = useState<"celsius" | "fahrenheit">(() => {
-    const stored = localStorage.getItem("temp_unit");
-    return stored === "celsius" || stored === "fahrenheit" ? stored : "celsius";
-  });
-
   // username
   const [username, setUsername] = useState<string>(() => {
     return localStorage.getItem("username") || "";
   });
 
-  // clock format
-  const [clockFormat, setClockFormat] = useState<"12" | "24">(() => {
-    const stored = localStorage.getItem("clockFormat");
-    return stored === "12" ? "12" : "24";
+  const [twelveHourMode, setTwelveHourMode] = useState<boolean>(() => {
+    const stored = localStorage.getItem("twelveHourMode") || "false";
+    return JSON.parse(stored);
   });
 
-  // dark mode toggle
+  const [isCelsius, toggleUseCelsius] = useState<boolean>(() => {
+    const stored = localStorage.getItem("useCelsius") || "false";
+    return JSON.parse(stored);
+  });
+
+  // dark mode
   const [darkToggled, setDarkToggled] = useState<boolean>(() => {
     const stored = localStorage.getItem("darkToggled") || "false";
     return JSON.parse(stored);
@@ -60,18 +58,19 @@ export const DashboardSettingsProvider: React.FC<{
     document.documentElement.classList.toggle("dark", shouldUseDark);
   }, [darkToggled]);
 
-  // Write changes to localStorage
   useEffect(() => {
-    localStorage.setItem("temp_unit", unit);
     localStorage.setItem("username", username);
-    localStorage.setItem("clockFormat", clockFormat);
+    localStorage.setItem("useCelsius", JSON.stringify(isCelsius));
+    localStorage.setItem("twelveHourMode", JSON.stringify(twelveHourMode));
     localStorage.setItem("darkToggled", JSON.stringify(darkToggled));
     localStorage.setItem("enableSearch", JSON.stringify(isSearchToggled));
     localStorage.setItem("enableQuote", JSON.stringify(isQuoteToggled));
   }, [
-    unit,
+    // unit,
     username,
-    clockFormat,
+    isCelsius,
+    twelveHourMode,
+    // clockFormat,
     darkToggled,
     isSearchToggled,
     isQuoteToggled,
@@ -80,22 +79,23 @@ export const DashboardSettingsProvider: React.FC<{
   // Sync changes from other tabs
   useEffect(() => {
     const syncSettings = (e: StorageEvent) => {
-      if (
-        e.key === "temp_unit" &&
-        (e.newValue === "celsius" || e.newValue === "fahrenheit")
-      ) {
-        setUnit(e.newValue);
-      }
-
       if (e.key === "username" && e.newValue) {
         setUsername(e.newValue);
       }
 
       if (
-        e.key === "clockFormat" &&
-        (e.newValue === "12" || e.newValue === "24")
+        e.key === "isCelsius" &&
+        e.newValue &&
+        (e.newValue === "true" || e.newValue === "false")
       ) {
-        setClockFormat(e.newValue as "12" | "24");
+        toggleUseCelsius(JSON.parse(e.newValue));
+      }
+      if (
+        e.key === "twelveHourMode" &&
+        e.newValue &&
+        (e.newValue === "true" || e.newValue === "false")
+      ) {
+        setTwelveHourMode(JSON.parse(e.newValue));
       }
 
       if (
@@ -129,12 +129,12 @@ export const DashboardSettingsProvider: React.FC<{
   return (
     <DashboardSettingsContext.Provider
       value={{
-        unit,
-        setUnit,
         username,
         setUsername,
-        clockFormat,
-        setClockFormat,
+        isCelsius,
+        toggleUseCelsius,
+        twelveHourMode,
+        setTwelveHourMode,
         darkToggled,
         setDarkToggled,
         isSearchToggled,

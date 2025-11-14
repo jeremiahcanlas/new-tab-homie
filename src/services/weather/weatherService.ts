@@ -2,7 +2,7 @@ import type WeatherProvider from "./WeatherProvider";
 import weatherType from "../../data/weatherType.json";
 
 const weatherService: WeatherProvider = {
-  async getCurrentWeather(geolocation, unit) {
+  async getCurrentWeather(geolocation, isCelsius) {
     if (!geolocation) {
       geolocation = {
         lat: 43.65107,
@@ -13,6 +13,8 @@ const weatherService: WeatherProvider = {
     const { lat, lon } = geolocation;
 
     try {
+      const unit = isCelsius ? "celsius" : "fahrenheit";
+
       const res = await fetch(
         `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&temperature_unit=${unit}&current=temperature_2m,apparent_temperature,weather_code`
       );
