@@ -1,33 +1,28 @@
-# 🌐 Homie Dashboard
+# Homie Dashboard
 
 A fast, minimalist new tab dashboard built with React + Vite + TypeScript and Tailwind CSS. Transform your browser's new tab into a personalized workspace with intelligent greetings, real-time weather, and daily motivation.
 
-[![Built with React](https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=react&logoColor=black)](https://reactjs.org/)
-[![Built with TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Built with Vite](https://img.shields.io/badge/Vite-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vite.dev/)
-[![Styled with Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+---
+
+## Features
+
+- **Smart Greetings** - Personalized time-based messages
+- **Real-time Weather** - Current weather conditions and temperature based on location
+- **Location Display** - Shows your current city and region
+- **Daily Motivation** - Random motivational quotes
+- **Persistent Preferences** - Your settings are saved locally across sessions
+- **Responsive Design** - Optimized for various desktop screen sizes
+- **Lightning Fast** - Built with Vite for instant loading and optimal performance
 
 ---
 
-## ✨ Features
-
-- **🕐 Smart Greetings** - Personalized time-based messages that adapt to your local time
-- **🌤️ Real-time Weather** - Current weather conditions and temperature for your location
-- **📍 Location Display** - Shows your current city and region
-- **💭 Daily Motivation** - Inspiring quotes to start your day right
-- **💾 Persistent Preferences** - Your settings are saved locally across sessions
-- **📱 Responsive Design** - Optimized for various desktop screen sizes
-- **⚡ Lightning Fast** - Built with Vite for instant loading and optimal performance
-
----
-
-## 🎯 Why Homie Dashboard?
+## Why Homie Dashboard?
 
 Replace your cluttered new tab page with a clean, functional dashboard that provides everything you need at a glance. No distractions, just the essentials presented beautifully.
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Technology       | Purpose                          |
 | ---------------- | -------------------------------- |
@@ -38,7 +33,7 @@ Replace your cluttered new tab page with a clean, functional dashboard that prov
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -87,7 +82,7 @@ nvm use 20.19.4
 
 ---
 
-## 📖 Usage
+## Usage
 
 ### Setting as Default New Tab
 
@@ -99,7 +94,7 @@ The dashboard automatically detects your location for weather and greetings. On 
 
 ---
 
-## 🔧 Development
+## Development
 
 ### Available Scripts
 
@@ -130,7 +125,7 @@ homie-dashboard/
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
 
@@ -142,13 +137,7 @@ Contributions are welcome! Please feel free to submit a Pull Request. For major 
 
 ---
 
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - Weather data provided by [Open-Meteo Weather Forecast API](https://open-meteo.com/en/docs)
 - Reverse geolocation provided by [Nominatim API](https://nominatim.org/)
@@ -156,12 +145,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-## 📧 Support
+## Support
 
 If you have any questions or run into issues, please [open an issue](https://github.com/jeremiahcanlas/new-tab-homie/issues) on GitHub.
-
----
-
-<div align="center">
-  Developed/Designed by <a href="https://github.com/jeremiahcanlas">Jeremiah Canlas</a>
-</div>
