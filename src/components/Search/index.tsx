@@ -29,6 +29,7 @@ const Search = (): React.JSX.Element => {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             className="w-full border border-gray-300 px-4 py-2 rounded-l "
+            autoFocus
           />
           <button
             type="submit"
