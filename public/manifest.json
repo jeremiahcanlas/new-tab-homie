@@ -6,10 +6,7 @@
   "chrome_url_overrides": {
     "newtab": "index.html"
   },
-  "permissions": [
-    "activeTab",
-    "search"
-  ],
+  "permissions": ["geolocation", "search"],
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'; font-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; style-src 'self' https://fonts.googleapis.com;"
   }
