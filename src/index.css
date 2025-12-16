@@ -131,7 +131,7 @@ body {
   }
 
   .menu-sidebar {
-    @apply w-0;
+    @apply w-0 relative;
   }
 
   .menu-sidebar.open {
