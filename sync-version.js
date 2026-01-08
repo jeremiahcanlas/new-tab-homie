@@ -19,9 +19,9 @@ console.log(`Updated manifest.json to version ${pkg.version}`);
 const locationServicePath = "./src/services/location/locationService.ts";
 let locationServiceContent = readFileSync(locationServicePath, "utf8");
 
-// Replace version in User-Agent string (format: homie-app@VERSION)
+// Replace version in User-Agent string (format: homie-app/VERSION)
 locationServiceContent = locationServiceContent.replace(
-  /("User-Agent":\s*"homie-app@)([^"]+)(")/,
+  /("User-Agent":\s*"homie-app\/)([^"\s]+)([^"]*")/,
   `$1${pkg.version}$3`
 );
 

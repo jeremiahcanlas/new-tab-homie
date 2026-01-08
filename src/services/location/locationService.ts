@@ -90,7 +90,7 @@ const locationService: LocationProvider = {
 
         {
           headers: {
-            "User-Agent": "homie-app/0.12.1 (contact: jjmcanlas@gmail.com)",
+            "User-Agent": "homie-app/0.13.1 (contact: jjmcanlas@gmail.com)",
           },
         }
       );
