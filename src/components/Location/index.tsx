@@ -18,13 +18,25 @@ const Location = (props: LocationProps): React.JSX.Element => {
     );
 
   return (
-    <h2 className="align-middle font-bold text-[min(30vw,0.9em)]">
-      <span className="inline-block w-5 align-text-bottom">
-        <LocationPin />
-      </span>
-      {city}
-      {stateProvince ? ", " + stateProvince : ""}
-    </h2>
+    <div>
+      <h2 className="align-middle font-bold text-[min(30vw,0.9em)]">
+        <span className="inline-block w-5 align-text-bottom">
+          <LocationPin />
+        </span>
+        {city}
+        {stateProvince ? ", " + stateProvince : ""}
+      </h2>
+      <p className="text-[8px] text-gray-500 dark:text-gray-400 mt-1 text-right">
+        <a
+          href="https://www.openstreetmap.org/copyright"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline hover:text-gray-700 dark:hover:text-gray-300"
+        >
+          OpenStreetMap
+        </a>
+      </p>
+    </div>
   );
 };
 
