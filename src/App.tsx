@@ -1,6 +1,5 @@
 import Clock from "./components/Clock";
 import Greet from "./components/Greet";
-import Location from "./components/Location";
 import Quote from "./components/Quote";
 import Weather from "./components/Weather";
 import Menu from "./components/Menu";
@@ -11,7 +10,6 @@ import { GearIcon } from "./assets/vectors";
 
 import { DashboardSettingsProvider } from "./context/DashboardSettingsContext";
 import { useWeather } from "./hooks/weather";
-import { useLocation } from "./hooks/location";
 import Search from "./components/Search";
 
 const GearButton = ({
@@ -35,19 +33,12 @@ const Forecast = (): React.JSX.Element => {
     weather,
     error: weatherError,
   } = useWeather();
-  const {
-    loading: locationLoading,
-    location,
-    error: locationError,
-  } = useLocation();
 
-  if (locationLoading || weatherLoading || !weather || !location)
-    return <div className="h-[97.41px]" />;
+  if (weatherLoading || !weather) return <div className="h-[97.41px]" />;
 
   return (
     <div className="flex flex-col gap-2 border border-gray-300 rounded p-1.5 w-[min(80vw,220px)] shadow-outline animate-slide-in-right">
       <Weather weather={weather} error={weatherError} />
-      <Location location={location} error={locationError} />
     </div>
   );
 };

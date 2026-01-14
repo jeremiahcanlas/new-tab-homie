@@ -38,6 +38,7 @@ const weatherService: WeatherProvider = {
       const feelsLike = Math.round(apparent_temperature);
 
       const filteredData = {
+        weatherCode,
         temperature,
         weatherStatus,
         feelsLike,

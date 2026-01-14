@@ -11,6 +11,7 @@ export type WeatherData = {
   temperature: number;
   weatherStatus: string;
   feelsLike: number;
+  weatherCode: string;
 };
 
 export type QuoteData = {
