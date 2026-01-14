@@ -7,6 +7,7 @@ describe("Weather", () => {
     temperature: 18,
     weatherStatus: "Sunny",
     feelsLike: 19,
+    weatherCode: "0",
   };
 
   it("should display weather data correctly", () => {
